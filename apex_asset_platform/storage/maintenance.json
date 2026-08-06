@@ -1,0 +1,92 @@
+[
+    {
+        "maintenance_id": "MNT-9001",
+        "asset_id": "EQ-1001",
+        "service_date": "2026-05-12",
+        "description": "Routine 100-hour oil and filter service",
+        "cost": "350.00",
+        "meter_hours_at_service": "100.0",
+        "performed_by": "Tech-Dave"
+    },
+    {
+        "maintenance_id": "MNT-9002",
+        "asset_id": "EQ-1002",
+        "service_date": "2026-06-01",
+        "description": "Generator alternator replacement",
+        "cost": "1200.00",
+        "meter_hours_at_service": "400.0",
+        "performed_by": "Tech-Sarah"
+    },
+    {
+        "maintenance_id": "MNT-9003",
+        "asset_id": "EQ-1002",
+        "service_date": "2026-08-05",
+        "description": "Head gasket diagnostic and overhaul",
+        "cost": "1850.00",
+        "meter_hours_at_service": "510.0",
+        "performed_by": "Tech-Dave"
+    },
+    {
+        "maintenance_id": "MNT-9004",
+        "asset_id": "EQ-1004",
+        "service_date": "2026-07-18",
+        "description": "Light tower bulb replacement and wiring fix",
+        "cost": "210.00",
+        "meter_hours_at_service": "300.0",
+        "performed_by": "Tech-Dave"
+    },
+    {
+        "maintenance_id": "MNT-9005",
+        "asset_id": "EQ-1005",
+        "service_date": "2026-06-20",
+        "description": "Skid steer 200-hour hydraulic fluid flush",
+        "cost": "650.00",
+        "meter_hours_at_service": "200.0",
+        "performed_by": "Tech-Sarah"
+    },
+    {
+        "maintenance_id": "MNT-9006",
+        "asset_id": "EQ-1006",
+        "service_date": "2026-07-28",
+        "description": "Excavator track tension adjustment and grease",
+        "cost": "180.00",
+        "meter_hours_at_service": "400.0",
+        "performed_by": "Tech-Dave"
+    },
+    {
+        "maintenance_id": "MNT-9007",
+        "asset_id": "EQ-1007",
+        "service_date": "2026-06-15",
+        "description": "Boom lift annual safety inspection and hydraulic service",
+        "cost": "950.00",
+        "meter_hours_at_service": "800.0",
+        "performed_by": "Tech-Sarah"
+    },
+    {
+        "maintenance_id": "MNT-9008",
+        "asset_id": "EQ-1008",
+        "service_date": "2026-05-10",
+        "description": "Scissor lift battery pack replacement",
+        "cost": "480.00",
+        "meter_hours_at_service": "100.0",
+        "performed_by": "Tech-Sarah"
+    },
+    {
+        "maintenance_id": "MNT-9009",
+        "asset_id": "EQ-1012",
+        "service_date": "2026-08-04",
+        "description": "Trash pump carburetor cleaning and seal overhaul",
+        "cost": "320.00",
+        "meter_hours_at_service": "100.0",
+        "performed_by": "Tech-Dave"
+    },
+    {
+        "maintenance_id": "MNT-9010",
+        "asset_id": "EQ-1015",
+        "service_date": "2026-07-30",
+        "description": "Air compressor filter service and radiator clean",
+        "cost": "400.00",
+        "meter_hours_at_service": "600.0",
+        "performed_by": "Tech-Dave"
+    }
+]

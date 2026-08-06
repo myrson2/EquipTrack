@@ -1,0 +1,72 @@
+[
+    {
+        "customer_id": "CUST-5001",
+        "company_name": "Apex Build Corp",
+        "email": "dispatch@apexbuild.com",
+        "phone": "555-0192",
+        "has_unpaid_balance": "false"
+    },
+    {
+        "customer_id": "CUST-5002",
+        "company_name": "Metro Paving Ltd",
+        "email": "billing@metropaving.com",
+        "phone": "555-0144",
+        "has_unpaid_balance": "true"
+    },
+    {
+        "customer_id": "CUST-5003",
+        "company_name": "Horizon Utilities Inc",
+        "email": "site@horizonutil.com",
+        "phone": "555-0188",
+        "has_unpaid_balance": "false"
+    },
+    {
+        "customer_id": "CUST-5004",
+        "company_name": "Summit Infrastructure",
+        "email": "ops@summitinfra.io",
+        "phone": "555-0133",
+        "has_unpaid_balance": "false"
+    },
+    {
+        "customer_id": "CUST-5005",
+        "company_name": "Pinnacle Concrete",
+        "email": "info@pinnacleconcrete.com",
+        "phone": "555-0211",
+        "has_unpaid_balance": "false"
+    },
+    {
+        "customer_id": "CUST-5006",
+        "company_name": "Vanguard Builders",
+        "email": "procurement@vanguardbuilders.com",
+        "phone": "555-0255",
+        "has_unpaid_balance": "false"
+    },
+    {
+        "customer_id": "CUST-5007",
+        "company_name": "EcoLandscapes LLC",
+        "email": "contact@ecolandscapes.net",
+        "phone": "555-0300",
+        "has_unpaid_balance": "true"
+    },
+    {
+        "customer_id": "CUST-5008",
+        "company_name": "Titan Demolition",
+        "email": "safety@titandemo.com",
+        "phone": "555-0377",
+        "has_unpaid_balance": "false"
+    },
+    {
+        "customer_id": "CUST-5009",
+        "company_name": "Interstate Highway Group",
+        "email": "ihg_dispatch@interstate.gov",
+        "phone": "555-0422",
+        "has_unpaid_balance": "false"
+    },
+    {
+        "customer_id": "CUST-5010",
+        "company_name": "Coastal Dredging Co",
+        "email": "operations@coastaldredge.com",
+        "phone": "555-0499",
+        "has_unpaid_balance": "false"
+    }
+]
