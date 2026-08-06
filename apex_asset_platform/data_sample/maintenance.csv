@@ -1,0 +1,11 @@
+maintenance_id,asset_id,service_date,description,cost,meter_hours_at_service,performed_by
+MNT-9001,EQ-1001,2026-05-12,Routine 100-hour oil and filter service,350.00,100.0,Tech-Dave
+MNT-9002,EQ-1002,2026-06-01,Generator alternator replacement,1200.00,400.0,Tech-Sarah
+MNT-9003,EQ-1002,2026-08-05,Head gasket diagnostic and overhaul,1850.00,510.0,Tech-Dave
+MNT-9004,EQ-1004,2026-07-18,Light tower bulb replacement and wiring fix,210.00,300.0,Tech-Dave
+MNT-9005,EQ-1005,2026-06-20,Skid steer 200-hour hydraulic fluid flush,650.00,200.0,Tech-Sarah
+MNT-9006,EQ-1006,2026-07-28,Excavator track tension adjustment and grease,180.00,400.0,Tech-Dave
+MNT-9007,EQ-1007,2026-06-15,Boom lift annual safety inspection and hydraulic service,950.00,800.0,Tech-Sarah
+MNT-9008,EQ-1008,2026-05-10,Scissor lift battery pack replacement,480.00,100.0,Tech-Sarah
+MNT-9009,EQ-1012,2026-08-04,Trash pump carburetor cleaning and seal overhaul,320.00,100.0,Tech-Dave
+MNT-9010,EQ-1015,2026-07-30,Air compressor filter service and radiator clean,400.00,600.0,Tech-Dave

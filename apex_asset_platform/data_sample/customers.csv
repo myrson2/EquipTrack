@@ -1,0 +1,11 @@
+customer_id,company_name,email,phone,has_unpaid_balance
+CUST-5001,Apex Build Corp,dispatch@apexbuild.com,555-0192,false
+CUST-5002,Metro Paving Ltd,billing@metropaving.com,555-0144,true
+CUST-5003,Horizon Utilities Inc,site@horizonutil.com,555-0188,false
+CUST-5004,Summit Infrastructure,ops@summitinfra.io,555-0133,false
+CUST-5005,Pinnacle Concrete,info@pinnacleconcrete.com,555-0211,false
+CUST-5006,Vanguard Builders,procurement@vanguardbuilders.com,555-0255,false
+CUST-5007,EcoLandscapes LLC,contact@ecolandscapes.net,555-0300,true
+CUST-5008,Titan Demolition,safety@titandemo.com,555-0377,false
+CUST-5009,Interstate Highway Group,ihg_dispatch@interstate.gov,555-0422,false
+CUST-5010,Coastal Dredging Co,operations@coastaldredge.com,555-0499,false
