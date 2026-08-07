@@ -77,3 +77,16 @@ This document records all key topics, architectural discussions, decisions, and 
   - **Menu Handlers:** Provides interactive sub-options for viewing fleet catalog, registering new equipment, recording usage hours & fuel levels for powered assets, and flagging machinery for maintenance.
   - **`main.py` Integration:** Connects menu option `1. Fleet Management` directly to `FleetManagementUI.display_fleet_menu()`.
 
+---
+
+### 8. Structural Pattern Matching Refactoring & Docstring Standardization
+- **Locations:**
+  - [fleet_management_ui.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/Interface/fleet_management_ui.py#L82-L103)
+  - [json_repository.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/repositories/json_repository.py)
+- **Key Concepts & Changes:**
+  - **Match-Case Refactoring:** Refactored binary `if-else` filter choices into Python 3.10+ `match filter_choice:` pattern matching.
+  - **Expanded Options [1-5]:** Added sub-menu options for `1. All Fleet Assets`, `2. Available Assets Only`, `3. Assets in Maintenance`, `4. Rented Assets`, and `5. Back to Main Menu`.
+  - **Safety & Stubs:** Initialized `assets = []` defensive list default, added `pass` stubs for cases `"3"` and `"4"` (pending `get_equipment_by_status` service layer implementation), and added wildcard `case _:` fallback for invalid inputs.
+  - **Docstring Completeness:** Added Google-style docstrings (`Args:` and `Returns:`) across all methods in `JSONRepository` (`__init__`, `load_all`, `save_all`, `append_record`).
+
+

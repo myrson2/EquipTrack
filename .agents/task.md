@@ -83,11 +83,12 @@
   - [ ] **Service Method `get_equipment_by_status(status: EquipmentStatus) -> list[BaseEquipment]`**: Filter inventory by any operational status (`AVAILABLE`, `IN_MAINTENANCE`, `RENTED`).
   - [ ] **Service Method `update_equipment_status(asset_id: str, new_status: EquipmentStatus) -> None`**: Manually toggle machine status and persist to JSON storage.
   - [ ] **Service Method `update_powered_parameters(...)`**: Modify engine hours, service intervals, tank capacities, or daily rates and persist to JSON storage.
-  - [ ] **CLI Catalog Filter Expansion (Option 2 in `main.py`)**:
-    - `1. All Fleet Assets`
-    - `2. Available Assets`
-    - `3. Assets In Maintenance`
-    - `4. Rented Assets`
+  - [x] **CLI Catalog Filter Expansion (Option 2 in `Interface/fleet_management_ui.py`)**:
+    - [x] `1. All Fleet Assets`
+    - [x] `2. Available Assets`
+    - [ ] `3. Assets In Maintenance` (Pending service method `get_equipment_by_status`)
+    - [ ] `4. Rented Assets` (Pending service method `get_equipment_by_status`)
+    - [x] `5. Back to Main Menu`
   - [ ] **CLI Parameter & Status Update Menu (Option 4 in `main.py`)**:
     - Add sub-option `4. Update Equipment Parameters & Status` in `display_fleet_menu()`.
     - Prompt for `Asset Tag ID` and allow modifying status, daily rates, run-hours, service intervals, or fuel tank capacity.

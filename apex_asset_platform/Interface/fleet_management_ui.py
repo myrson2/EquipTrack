@@ -11,7 +11,8 @@ def display_fleet_menu() -> None:
     print("1. Add New Equipment")
     print("2. View Fleet Catalog")
     print("3. Search Asset by Tag ID")
-    print("4. Back to Main Menu")
+    print("4. Update Equipment Parameters & Status")
+    print("5. Back to Main Menu")
     print("==================================================")
 
 
@@ -74,14 +75,33 @@ def handle_fleet_management(fleet_svc: FleetService) -> None:
                 print("\n--- Fleet Catalog ---")
                 print("1. All Fleet Assets")
                 print("2. Available Assets Only")
-                filter_choice = input("Select Filter Option [1-2]: ").strip()
+                print("3. Assets in Maintenance")
+                print("4. Rented Assets")
+                print("5. Back to Main Menu")
 
-                if filter_choice == "2":
-                    assets = fleet_svc.get_available_assets()
-                    print("\n--- Available Machinery ---")
-                else:
-                    assets = fleet_svc.get_all_equipment()
-                    print("\n--- Full Fleet Catalog ---")
+                filter_choice = input("Select Filter Option [1-5]: ").strip()
+                assets = []
+
+                match filter_choice:
+                    case "1":
+                        assets = fleet_svc.get_all_equipment()
+                        print("\n--- Full Fleet Catalog ---")
+                    case "2":
+                        assets = fleet_svc.get_available_assets()
+                        print("\n--- Available Machinery ---")
+                    case "3":
+                        assets = fleet_svc.get_in_maintenance_equipment()
+                        print("\n--- Assets in Maintenance ---")
+                        pass
+                    case "4":
+                        assets = fleet_svc.get_rented_equipment()
+                        print("\n--- Rented Assets ---")
+                        pass
+                    case "5":
+                        continue
+                    case _:
+                        print("\nInvalid selection. Showing full catalog by default.")
+                        assets = fleet_svc.get_all_equipment()
 
                 if not assets:
                     print("No equipment records found.\n")
@@ -101,6 +121,10 @@ def handle_fleet_management(fleet_svc: FleetService) -> None:
                     print(f"\nERROR: {err}\n")
 
             case "4":
+
+                pass
+
+            case "5":
                 print("\nReturning to Main Operator Menu...\n")
                 break
 

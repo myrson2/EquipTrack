@@ -86,6 +86,12 @@ class FleetService:
         """
         return [item for item in self.equipment_list if item.status == EquipmentStatus.AVAILABLE]
 
+    def get_in_maintenance_equipment(self) -> list[BaseEquipment]:
+        return [item for item in self.equipment_list if item.status == EquipmentStatus.IN_MAINTENANCE]
+
+    def get_rented_equipment(self) -> list[BaseEquipment]:
+        return[item for item in self.equipment_list if item.status == EquipmentStatus.RENTED]
+
     def get_equipment_by_id(self, asset_id: str) -> BaseEquipment:
         """Searches for a specific equipment item by its unique asset_id.
 
