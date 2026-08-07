@@ -43,3 +43,37 @@ This document records all key topics, architectural discussions, decisions, and 
 - **Key Concepts:**
   - Avoiding naming conflicts between built-in `FileNotFoundError` and custom exceptions in `custom_exceptions.py`.
   - Using `Path.exists()` for defensive path checking before attempting file I/O.
+
+---
+
+### 5. Implementation of Domain Entity Models (`BaseEquipment` & `PoweredEquipment`)
+- **Location:**
+  - [base_equipment.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/models/fleet_management_models/base_equipment.py)
+  - [powered_equipment.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/models/fleet_management_models/powered_equipment.py)
+  - [enum.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/models/fleet_management_models/enum.py)
+- **Key Concepts & Design:**
+  - **`BaseEquipment`**: Serves as the domain entity base class with properties `asset_id`, `model_name`, `daily_rate`, `purchase_year`, and `status`. Uses `@property` decorators for encapsulated validation. Includes rental cost calculation, maintenance status transitions (`mark_maintenance()`, `mark_available()`), dictionary serialization (`to_dict()`), and standard magic methods (`__repr__`, `__str__`, `__eq__`, `__lt__`).
+  - **`PoweredEquipment`**: Inherits from `BaseEquipment` and adds engine operational state attributes (`current_hours`, `hours_at_last_service`, `service_interval_hours`, `fuel_capacity_gallons`, `current_fuel_gal`). Overrides `to_dict()` and `calculate_rental_cost()` (incorporating operating hour surcharges), and provides logic for usage logging (`record_usage()`) and service threshold evaluation (`requires_service()`).
+  - **`EquipmentStatus` & `EquipmentType` Enums**: Encapsulate status (`AVAILABLE`, `RENTED`, `IN_MAINTENANCE`) and equipment categorization (`BASE`, `POWERED`).
+
+---
+
+### 6. Implementation of `FleetService` Layer Orchestration
+- **Location:** [fleet_service.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/services/fleet_service.py)
+- **Key Concepts & Responsibilities:**
+  - **Dependency Injection:** Accepts `JSONRepository` in `__init__()` and maintains an in-memory cache list `equipment_list`.
+  - **Deserialization (`_load_initial_fleet()`)**: Converts raw dictionary data from JSON disk storage into `PoweredEquipment` or `BaseEquipment` model instances.
+  - **Fleet Operations:** Implements CRUD & business logic methods including `add_equipment()`, `get_all_equipment()`, `get_available_assets()`, `get_equipment_by_id()`, `flag_for_service()`, and `update_hours_and_check_service()` with auto-flagging for maintenance when threshold standard hours are exceeded.
+  - **Persistence:** Synchronizes in-memory object list back to JSON file storage via `save_equipment_list_to_storage()`.
+
+---
+
+### 7. CLI Fleet Management Menu Integration
+- **Location:**
+  - [fleet_management_ui.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/Interface/fleet_management_ui.py)
+  - [main.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/main.py)
+- **Key Concepts & Features:**
+  - **UI Decoupling:** Modularized terminal UI operations into `FleetManagementUI` class inside `Interface/fleet_management_ui.py`.
+  - **Menu Handlers:** Provides interactive sub-options for viewing fleet catalog, registering new equipment, recording usage hours & fuel levels for powered assets, and flagging machinery for maintenance.
+  - **`main.py` Integration:** Connects menu option `1. Fleet Management` directly to `FleetManagementUI.display_fleet_menu()`.
+

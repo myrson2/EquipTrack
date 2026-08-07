@@ -20,4 +20,6 @@ class JSONRepository:
             json.dump(data, file, indent=4)
 
     def append_record(self, record: dict) -> None:
-        pass
+        data = self.load_all().copy()
+        data.append(record)
+        self.save_all(data)
