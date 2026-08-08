@@ -33,13 +33,3 @@ class JSONRepository:
         """
         with open(self.file_path, "w", encoding="utf-8") as file:
             json.dump(data, file, indent=4)
-
-    def append_record(self, record: dict) -> None:
-        """Appends a single dictionary record to persistent JSON storage.
-
-        Args:
-            record (dict): Single record dictionary to append.
-        """
-        data = self.load_all().copy()
-        data.append(record)
-        self.save_all(data)

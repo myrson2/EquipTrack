@@ -15,6 +15,57 @@ def display_fleet_menu() -> None:
     print("5. Back to Main Menu")
     print("==================================================")
 
+def fleet_catalog_section(fleet_svc):
+    while True:
+        print("\n--- Fleet Catalog ---")
+        print("1. All Fleet Assets")
+        print("2. Available Assets Only")
+        print("3. Assets in Maintenance")
+        print("4. Rented Assets")
+        print("5. Back to Main Menu")
+
+        filter_choice = int(input("Select Filter Option [1-5]: ").strip())
+        assets = []
+
+        match filter_choice:
+            case 1:
+                assets = fleet_svc.get_all_equipment()
+                print("\n--- Full Fleet Catalog ---")
+            case 2:
+                assets = fleet_svc.get_available_assets()
+                print("\n--- Available Machinery ---")
+            case 3:
+                assets = fleet_svc.get_in_maintenance_equipment()
+                print("\n--- Assets in Maintenance ---")
+            case 4:
+                assets = fleet_svc.get_rented_equipment()
+                print("\n--- Rented Assets ---")
+            case 5:
+                return
+            case _:
+                print("\nInvalid selection. Showing full catalog by default.")
+                assets = fleet_svc.get_all_equipment()
+
+        if not assets:
+            print("No equipment records found.\n")
+        else:
+            for asset in assets:
+                print(str(asset))
+            print()
+
+            update_item_to_available = str(input("Select Update Item to Available (y/n): ").strip())
+
+            if update_item_to_available == "y":
+                item = input("Select Item to Update: ").strip().upper()
+                fleet_item = fleet_svc.get_equipment_by_id(item)
+                print(fleet_item.status)
+
+                if fleet_item.status.value == "IN_MAINTENANCE":
+                    fleet_svc.update_equipment_status(fleet_item)
+                else:
+                    print("IN MAINTENANCE EQUIPMENTS ONLY")
+                    continue
+
 
 def handle_fleet_management(fleet_svc: FleetService) -> None:
     """Handles interactive operator CLI workflows for Fleet Management.
@@ -72,44 +123,7 @@ def handle_fleet_management(fleet_svc: FleetService) -> None:
                     print(f"\nERROR: Invalid input or duplicate asset ID - {err}\n")
 
             case "2":
-                print("\n--- Fleet Catalog ---")
-                print("1. All Fleet Assets")
-                print("2. Available Assets Only")
-                print("3. Assets in Maintenance")
-                print("4. Rented Assets")
-                print("5. Back to Main Menu")
-
-                filter_choice = input("Select Filter Option [1-5]: ").strip()
-                assets = []
-
-                match filter_choice:
-                    case "1":
-                        assets = fleet_svc.get_all_equipment()
-                        print("\n--- Full Fleet Catalog ---")
-                    case "2":
-                        assets = fleet_svc.get_available_assets()
-                        print("\n--- Available Machinery ---")
-                    case "3":
-                        assets = fleet_svc.get_in_maintenance_equipment()
-                        print("\n--- Assets in Maintenance ---")
-                        pass
-                    case "4":
-                        assets = fleet_svc.get_rented_equipment()
-                        print("\n--- Rented Assets ---")
-                        pass
-                    case "5":
-                        continue
-                    case _:
-                        print("\nInvalid selection. Showing full catalog by default.")
-                        assets = fleet_svc.get_all_equipment()
-
-                if not assets:
-                    print("No equipment records found.\n")
-                else:
-                    for asset in assets:
-                        print(str(asset))
-                    print()
-
+                fleet_catalog_section(fleet_svc)
             case "3":
                 print("\n--- Search Asset ---")
                 search_id = input("Enter Asset Tag ID to Search: ").strip()

@@ -89,4 +89,15 @@ This document records all key topics, architectural discussions, decisions, and 
   - **Safety & Stubs:** Initialized `assets = []` defensive list default, added `pass` stubs for cases `"3"` and `"4"` (pending `get_equipment_by_status` service layer implementation), and added wildcard `case _:` fallback for invalid inputs.
   - **Docstring Completeness:** Added Google-style docstrings (`Args:` and `Returns:`) across all methods in `JSONRepository` (`__init__`, `load_all`, `save_all`, `append_record`).
 
+---
+
+### 9. Maintenance Status Transition & Catalog Filter Integration
+- **Locations:**
+  - [fleet_service.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/services/fleet_service.py#L89-L166)
+  - [fleet_management_ui.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/Interface/fleet_management_ui.py#L18-L69)
+- **Key Concepts & Features:**
+  - **Status Filtering:** Added `get_in_maintenance_equipment()` and `get_rented_equipment()` methods to `FleetService`.
+  - **Maintenance Completion Workflow:** Implemented `update_equipment_status(fleet_item)` to reset `hours_at_last_service = current_hours` for powered machinery and transition status to `AVAILABLE` if service requirements are met.
+  - **Interactive CLI Catalog Section:** Extracted catalog choices into `fleet_catalog_section(fleet_svc)`, connecting options 3 and 4 directly to service filter queries, and allowing operators to interactively select items from the maintenance list to update back to `AVAILABLE`.
+
 

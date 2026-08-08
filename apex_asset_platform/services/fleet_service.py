@@ -149,3 +149,17 @@ class FleetService:
 
         self.save_equipment_list_to_storage()
         return service_needed
+
+    def update_equipment_status(self, fleet_item: PoweredEquipment) -> None:
+        """Completes maintenance for an asset, updating status to
+          AVAILABLE and resetting powered service baselines.
+
+                Args:
+                    fleet_item (PoweredEquipment): Unique asset tag identifier.
+                """
+
+        if isinstance(fleet_item, PoweredEquipment):
+            fleet_item.hours_at_last_service = fleet_item.current_hours
+            if not fleet_item.requires_service():
+                fleet_item.mark_available()
+            self.save_equipment_list_to_storage()
