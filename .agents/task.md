@@ -1,4 +1,4 @@
-# Fleet Management Tasks & Implementation Plan
+# Rental Operations Tasks & Implementation Plan
 
 ## Workflow Rule: Strict Sequential Progression
 > [!IMPORTANT]
@@ -10,83 +10,62 @@
 
 | Task | File Target | Status | Progression |
 | :--- | :--- | :--- | :--- |
-| **Task 1: Base Equipment Model** | `models/fleet_management_models/base_equipment.py` | `completed` | Finished |
-| **Task 2: Powered Equipment Subclass** | `models/fleet_management_models/powered_equipment.py` | `completed` | Finished |
-| **Task 3: Fleet Service Orchestration** | `services/fleet_service.py` | `completed` | Finished |
-| **Task 4: CLI Fleet Management Menu Base** | `main.py` | `completed` | Finished |
-| **Task 5: Fleet Manager Enhancements** | `services/fleet_service.py` & `main.py` | `pending` | **[ACTIVE TASK]** |
+| **Task 1: Contract Domain Model** | `models/contract.py` | `pending` | **[ACTIVE TASK]** |
+| **Task 2: Rental Service Layer** | `services/rental_service.py` | `pending` | Locked |
+| **Task 3: Rental Desk CLI Interface** | `Interface/rental_desk_ui.py` & `main.py` | `pending` | Locked |
 
 ---
 
 ## Task Details
 
-### Task 1: Abstract Base Model `BaseEquipment` — `completed`
-- **Target File:** `apex_asset_platform/models/fleet_management_models/base_equipment.py`
-- **Status:** `completed`
-- **Implemented Features:**
-  - [x] Defined `BaseEquipment` class with attributes (`asset_id`, `model_name`, `daily_rate`, `purchase_year`, `status`).
-  - [x] Implemented encapsulation via `@property` getters and setters with input boundary validation.
-  - [x] Implemented `to_dict()` dictionary serialization.
-  - [x] Implemented `calculate_rental_cost()`, `mark_maintenance()`, and `mark_available()`.
-  - [x] Implemented magic methods (`__repr__`, `__str__`, `__eq__`, `__lt__` for sorting by `asset_id`).
-  - [x] Added Google-style docstrings with `Args:` and `Returns:` for all methods/properties.
+### Task 1: Contract Domain Model (`Contract`) — `pending`
+- **Target File:** `apex_asset_platform/models/contract.py`
+- **Status:** `pending`
+- **Required Features:**
+  - [ ] Define `Contract` domain entity class binding a customer and an equipment asset.
+  - [ ] Implement attributes: `contract_id` (str), `customer_id` (str), `asset_id` (str), `start_date` (datetime/str), `planned_end_date` (datetime/str), `actual_return_date` (datetime/str | None), `initial_hours` (float), `return_hours` (float | None), `base_cost` (float), `penalty_fees` (float), `status` (str - `ACTIVE`, `CLOSED`, `CANCELLED`).
+  - [ ] Implement encapsulation via `@property` getters and setters with input validation.
+  - [ ] Implement `close_contract(return_date, final_hours, fuel_returned, fuel_fee_per_gal)` to calculate overdue days, usage overages, refueling surcharges, and update contract standing.
+  - [ ] Implement `calculate_overdue_days() -> int`.
+  - [ ] Implement `to_dict() -> dict` and `@classmethod from_dict(data: dict) -> Contract`.
+  - [ ] Implement magic methods: `__repr__`, `__str__`, `__eq__`.
+  - [ ] Include complete Google-style docstrings (`Args:` & `Returns:`).
 
 ---
 
-### Task 2: Specialized Subclass `PoweredEquipment` — `completed`
-- **Target File:** `apex_asset_platform/models/fleet_management_models/powered_equipment.py`
-- **Status:** `completed`
-- **Implemented Features:**
-  - [x] Inherited from `BaseEquipment`.
-  - [x] Added powered-specific attributes (`current_hours`, `hours_at_last_service`, `service_interval_hours`, `fuel_capacity_gallons`, `current_fuel_gal`).
-  - [x] Implemented getters and setters with validation rules for engine attributes.
-  - [x] Overrode `to_dict()` using `super().to_dict()`.
-  - [x] Implemented `record_usage(hours_added: float, fuel_remaining: float)` with tank capacity checks and hour accumulation.
-  - [x] Implemented `requires_service() -> bool` threshold check.
-  - [x] Implemented `calculate_rental_cost(days: int) -> float`.
-  - [x] Added Google-style docstrings with `Args:` and `Returns:` for all methods/properties.
+### Task 2: Rental Service Layer (`RentalService`) — `pending`
+- **Target File:** `apex_asset_platform/services/rental_service.py`
+- **Status:** `pending`
+- **Required Features:**
+  - [ ] Create `RentalService` class injected with `FleetService`, `CustomerService`, and `JSONRepository(Path("storage/contracts.json"))`.
+  - [ ] Implement `_load_contract_cache()` and `_save_contract_cache()`.
+  - [ ] Implement `create_contract(customer_id: str, asset_id: str, duration_days: int) -> Contract`:
+    - Check customer credit standing (`has_unpaid_balance == False`).
+    - Check equipment availability (`status == AVAILABLE`).
+    - Transition equipment state to `RENTED`.
+    - Generate unique Contract ID (`CON-XXXX`) and save state.
+  - [ ] Implement `process_return(contract_id: str, return_hours: float, fuel_returned: float, return_date: str) -> Contract`:
+    - Look up active contract.
+    - Calculate penalties and close contract.
+    - Check machine operating hours and auto-flag maintenance if interval exceeded.
+    - Update customer delinquency standing if balance is unpaid.
+    - Transition equipment status to `AVAILABLE` (or `IN_MAINTENANCE`).
+    - Persist updated states to JSON storage files.
+  - [ ] Implement `get_active_contracts() -> list[Contract]` and `get_contract_by_id(contract_id: str) -> Contract`.
+  - [ ] Include complete Google-style docstrings (`Args:` & `Returns:`).
 
 ---
 
-### Task 3: `FleetService` Layer Orchestration — `completed`
-- **Target File:** `apex_asset_platform/services/fleet_service.py`
-- **Status:** `completed`
-- **Implemented Features:**
-  - [x] **Constructor (`__init__`)**: Dependency injection of `JSONRepository`.
-  - [x] **`_load_initial_fleet()`**: Deserializes raw JSON dicts into `PoweredEquipment` and `BaseEquipment` object instances in `self.equipment_list`.
-  - [x] **`save_equipment_list_to_storage()`**: Serializes all objects back to JSON disk storage.
-  - [x] **`add_equipment(equipment: BaseEquipment)`**: Intercepts duplicate IDs, appends to cache, and persists to disk.
-  - [x] **`get_all_equipment()`**: Returns `sorted(self.equipment_list)`.
-  - [x] **`get_available_assets()`**: Returns list of available equipment.
-  - [x] **`get_equipment_by_id(asset_id: str)`**: Looks up asset by ID or raises ValueError.
-  - [x] **`flag_for_service(asset_id: str)`**: Mutates status to maintenance and persists to disk.
-  - [x] **`update_hours_and_check_service(...) -> bool`**: Updates run-hours & fuel, auto-flags maintenance, saves to disk, and returns boolean flag.
-  - [x] Added Google-style docstrings with `Args:` and `Returns:` for all methods.
-
----
-
-### Task 4: CLI Integration (Option 1 Menu Base) — `completed`
-- **Target File:** `apex_asset_platform/main.py`
-- **Status:** `completed`
-- **Implemented Features:**
-  - [x] Initialized `JSONRepository(Path("storage/fleet.json"))` and injected into `FleetService`.
-  - [x] Created `display_fleet_menu()` with clean 2-space UI indentation.
-  - [x] Connected CLI Option `1. Fleet Management` to interactive sub-menu handler.
-  - [x] Added Google-style docstrings with `Args:` and `Returns:` for all CLI handlers.
-
----
-
-### Task 5: Fleet Manager Enhancements (Filtering & Status Updates) — `completed`
-- **Target Files:** `apex_asset_platform/services/fleet_service.py` & `apex_asset_platform/Interface/fleet_management_ui.py`
-- **Status:** `completed`
-- **Implemented Features:**
-  - [x] **Service Methods `get_in_maintenance_equipment()` & `get_rented_equipment()`**: Filter inventory by operational status (`IN_MAINTENANCE`, `RENTED`).
-  - [x] **Service Method `update_equipment_status(fleet_item)`**: Restores machine status to `AVAILABLE` upon maintenance completion and updates baseline run hours (`hours_at_last_service = current_hours`) for powered assets.
-  - [x] **CLI Catalog Filter Expansion (Option 2 in `Interface/fleet_management_ui.py`)**:
-    - [x] `1. All Fleet Assets`
-    - [x] `2. Available Assets`
-    - [x] `3. Assets In Maintenance`
-    - [x] `4. Rented Assets`
-    - [x] `5. Back to Main Menu`
-  - [x] **CLI Maintenance Update Sub-Workflow**:
-    - Prompt for asset tag ID from maintenance list and transition status to `AVAILABLE`.
+### Task 3: Rental Desk CLI Interface — `pending`
+- **Target Files:** `apex_asset_platform/Interface/rental_desk_ui.py` & `apex_asset_platform/main.py`
+- **Status:** `pending`
+- **Required Features:**
+  - [ ] Create interactive Rental Desk sub-menu (`display_rental_menu()`).
+  - [ ] Connect CLI sub-options:
+    - [ ] `1. Dispatch / Issue Rental Contract`
+    - [ ] `2. Process Equipment Return & Checkout`
+    - [ ] `3. View Active Rental Agreements`
+    - [ ] `4. Search Contract by ID`
+    - [ ] `5. Back to Main Menu`
+  - [ ] Hook `RentalService` into `main.py` under main menu Option `3. Rental Desk (Dispatch & Return)`.
+  - [ ] Handle input validation and display detailed billing summaries.

@@ -16,19 +16,20 @@ class FleetService:
         equipment_list (list[BaseEquipment]): In-memory cache of fleet machinery instances.
     """
 
-    def __init__(self, repository: JSONRepository) -> None:
+    def __init__(self, fleet_repository: JSONRepository, maintenance_repository: JSONRepository) -> None:
         """Initializes FleetService with repository dependency injection and loads in-memory catalog.
 
         Args:
-            repository (JSONRepository): Persistent JSON storage repository instance.
+            fleet_repository (JSONRepository): Persistent JSON storage repository instance.
         """
-        self.repository = repository
+        self.fleet_repository = fleet_repository
+        self.maintenance_repository = maintenance_repository
         self.equipment_list: list[BaseEquipment] = []
         self._load_initial_fleet()
 
     def _load_initial_fleet(self) -> None:
         """Private helper method that loads raw JSON records from storage and populates equipment_list with objects."""
-        raw_records = self.repository.load_all()
+        raw_records = self.fleet_repository.load_all()
         for record in raw_records:
             eq_type = record.get("equipment_type")
             if eq_type == EquipmentType.POWERED.value or eq_type == "POWERED":
@@ -57,7 +58,7 @@ class FleetService:
     def save_equipment_list_to_storage(self) -> None:
         """Persists all in-memory equipment objects back to JSON disk storage."""
         serialized_data = [item.to_dict() for item in self.equipment_list]
-        self.repository.save_all(serialized_data)
+        self.fleet_repository.save_all(serialized_data)
 
     def add_equipment(self, equipment: BaseEquipment) -> None:
         """Registers a new equipment asset into the fleet catalog.

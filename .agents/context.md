@@ -111,4 +111,25 @@ This document records all key topics, architectural discussions, decisions, and 
   - **`_load_initial_fleet` Deserialization:** Included `asset_id=record.get("asset_id")` in `_load_initial_fleet()` deserialization for both `PoweredEquipment` and `BaseEquipment`.
   - **Universal Maintenance Status Restoration:** Refined `update_equipment_status()` in `FleetService` to mark any equipment (static or powered) as `AVAILABLE`, while selectively updating `hours_at_last_service = current_hours` for powered machines.
 
+---
+
+### 11. Customer Accounts & Domain Architecture Implementation
+- **Locations:**
+  - [customer.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/models/customer_model/customer.py)
+  - [customer_service.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/services/customer_service.py)
+  - [customer_management_ui.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/Interface/customer_management_ui.py)
+  - [validators.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/utils/validators.py)
+  - [main.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/main.py)
+- **Key Concepts & Features:**
+  - **`Customer` Domain Model:** Created encapsulated domain model with `@property` getters and setters, dictionary serialization (`to_dict()`), factory constructor (`from_dict()` with safe string-boolean parsing), delinquency methods (`flag_delinquent()`, `clear_delinquent()`), and magic methods (`__repr__`, `__str__`, `__eq__`, `__lt__` for sorting by `customer_id`).
+  - **`CustomerService` Layer:** Implemented service layer managing `storage/customers.json` via `JSONRepository`. Features `_load_customer_cache()`, `_save_customer_cache()`, `register_customer()` (with auto-generated `CUST-XXXX` IDs), `get_all_customers()`, `get_customer_by_id()`, `search_customers()`, and `update_credit_status()`.
+  - **Validation Guardrails:** Created modular validator functions in `validators.py`: `gmail_validator()` (validates `@gmail.com`), `phone_validator()` (validates `09` prefix and 11-digit length), and safe `validate_unique_ids()` using `getattr()` to prevent `AttributeError` crashes across different domain model lists.
+  - **CLI Sub-Menu Integration:** Created `display_customer_menu()` and `handle_customer_management()` in `customer_management_ui.py` for creating accounts, viewing registered accounts, and filtering accounts by status (`PAID` vs `UNPAID`). Connected to `main.py` Option `2. Customer Accounts`.
+
+---
+
+### 12. Active Focus: Rental Operations & Transaction Lifecycle
+- **Next Milestone:** Implement `Contract` domain model (`models/contract.py`), `RentalService` (`services/rental_service.py`), and `RentalDeskUI` sub-menu (`Interface/rental_desk_ui.py`).
+
+
 

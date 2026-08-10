@@ -31,5 +31,6 @@ class JSONRepository:
         Args:
             data (list[dict]): List of dictionary records to serialize and save.
         """
+        self.file_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.file_path, "w", encoding="utf-8") as file:
             json.dump(data, file, indent=4)

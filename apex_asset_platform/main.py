@@ -2,7 +2,9 @@ from pathlib import Path
 import csv
 import exceptions.custom_exceptions as custom_exceptions
 import repositories.json_repository as json_repository
+from Interface.customer_management_ui import handle_customer_management
 from Interface.fleet_management_ui import handle_fleet_management
+from services.customer_service import CustomerService
 from services.fleet_service import FleetService
 
 def display_menu() -> None:
@@ -45,7 +47,11 @@ def main() -> None:
         print(f"Storage Initialization Notice: {e}")
 
     fleet_repo = json_repository.JSONRepository(Path("storage/fleet.json"))
-    fleet_svc = FleetService(repository=fleet_repo)
+    mtn_repo = json_repository.JSONRepository(Path("storage/maintenance.json"))
+    customer_repo = json_repository.JSONRepository(Path("storage/customers.json"))
+
+    fleet_svc = FleetService(fleet_repository=fleet_repo, maintenance_repository=mtn_repo)
+    customer_svc = CustomerService(customer_repository=customer_repo)
 
     while True:
         display_menu()
@@ -59,7 +65,7 @@ def main() -> None:
             case "1":
                 handle_fleet_management(fleet_svc)
             case "2":
-                print("\nOpening Customer Accounts...\n")
+                handle_customer_management(customer_svc)
             case "3":
                 print("\nOpening Rental Desk...\n")
             case "4":
