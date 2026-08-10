@@ -1,7 +1,12 @@
+import random
 from models.fleet_management_models.base_equipment import BaseEquipment, EquipmentType, EquipmentStatus
 from models.fleet_management_models.powered_equipment import PoweredEquipment
 from repositories.json_repository import JSONRepository
+from utils.validators import validate_unique_ids
 
+def asset_id_generator() -> str:
+    number = random.randint(1000, 10000)
+    return str(f"EQ-{number}")
 
 class FleetService:
     """Business logic orchestration service for managing fleet inventory, maintenance flags, and usage updates.
@@ -28,7 +33,7 @@ class FleetService:
             eq_type = record.get("equipment_type")
             if eq_type == EquipmentType.POWERED.value or eq_type == "POWERED":
                 obj = PoweredEquipment(
-                    asset_id=record["asset_id"],
+                    asset_id=record.get("asset_id"),
                     model_name=record["model_name"],
                     daily_rate=float(record["daily_rate"]),
                     purchase_year=int(record["purchase_year"]),
@@ -41,7 +46,7 @@ class FleetService:
                 )
             else:
                 obj = BaseEquipment(
-                    asset_id=record["asset_id"],
+                    asset_id=record.get("asset_id"),
                     model_name=record["model_name"],
                     daily_rate=float(record["daily_rate"]),
                     purchase_year=int(record["purchase_year"]),
@@ -63,12 +68,16 @@ class FleetService:
         Raises:
             ValueError: If an asset with the same asset_id already exists.
         """
-        for item in self.equipment_list:
-            if item.asset_id == equipment.asset_id:
-                raise ValueError(f"Asset ID '{equipment.asset_id}' already exists in fleet!")
 
-        self.equipment_list.append(equipment)
-        self.save_equipment_list_to_storage()
+        generated_id = asset_id_generator()
+
+        if validate_unique_ids(generated_id, self.equipment_list):
+            equipment.asset_id = generated_id
+            self.equipment_list.append(equipment)
+            self.save_equipment_list_to_storage()
+        else:
+            raise ValueError(f"Equipment with ID '{equipment.asset_id}' already exists.")
+
 
     def get_all_equipment(self) -> list[BaseEquipment]:
         """Retrieves all equipment items in the catalog sorted by asset_id.
@@ -150,16 +159,15 @@ class FleetService:
         self.save_equipment_list_to_storage()
         return service_needed
 
-    def update_equipment_status(self, fleet_item: PoweredEquipment) -> None:
-        """Completes maintenance for an asset, updating status to
-          AVAILABLE and resetting powered service baselines.
+    def update_equipment_status(self, fleet_item: BaseEquipment) -> None:
+        """Completes maintenance for an asset, restoring status to AVAILABLE.
 
-                Args:
-                    fleet_item (PoweredEquipment): Unique asset tag identifier.
-                """
+        Args:
+            fleet_item (BaseEquipment): Equipment instance to update.
+        """
+        fleet_item.mark_available()
 
         if isinstance(fleet_item, PoweredEquipment):
             fleet_item.hours_at_last_service = fleet_item.current_hours
-            if not fleet_item.requires_service():
-                fleet_item.mark_available()
-            self.save_equipment_list_to_storage()
+
+        self.save_equipment_list_to_storage()

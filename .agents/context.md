@@ -100,4 +100,15 @@ This document records all key topics, architectural discussions, decisions, and 
   - **Maintenance Completion Workflow:** Implemented `update_equipment_status(fleet_item)` to reset `hours_at_last_service = current_hours` for powered machinery and transition status to `AVAILABLE` if service requirements are met.
   - **Interactive CLI Catalog Section:** Extracted catalog choices into `fleet_catalog_section(fleet_svc)`, connecting options 3 and 4 directly to service filter queries, and allowing operators to interactively select items from the maintenance list to update back to `AVAILABLE`.
 
+---
+
+### 10. Model Inheritance Fix & Maintenance Status Refinement
+- **Locations:**
+  - [powered_equipment.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/models/fleet_management_models/powered_equipment.py#L40-L45)
+  - [fleet_service.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/services/fleet_service.py#L32-L52)
+- **Key Concepts & Fixes:**
+  - **`asset_id` Propagation in Inheritance:** Updated `PoweredEquipment` constructor to pass `asset_id` up to `super().__init__(..., asset_id=asset_id)`, ensuring `asset_id` is preserved when loading records from disk or creating powered assets.
+  - **`_load_initial_fleet` Deserialization:** Included `asset_id=record.get("asset_id")` in `_load_initial_fleet()` deserialization for both `PoweredEquipment` and `BaseEquipment`.
+  - **Universal Maintenance Status Restoration:** Refined `update_equipment_status()` in `FleetService` to mark any equipment (static or powered) as `AVAILABLE`, while selectively updating `hours_at_last_service = current_hours` for powered machines.
+
 

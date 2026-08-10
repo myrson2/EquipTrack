@@ -1,6 +1,6 @@
 [
     {
-        "asset_id": "EQ-1001",
+        "asset_id": null,
         "equipment_type": "POWERED",
         "model_name": "Cat 320 Hydraulic Excavator",
         "daily_rate": 450.0,
@@ -13,7 +13,7 @@
         "current_fuel_gal": 80.0
     },
     {
-        "asset_id": "EQ-1002",
+        "asset_id": null,
         "equipment_type": "POWERED",
         "model_name": "Generac 100kW Diesel Generator",
         "daily_rate": 180.0,
@@ -26,7 +26,7 @@
         "current_fuel_gal": 12.5
     },
     {
-        "asset_id": "EQ-1003",
+        "asset_id": null,
         "equipment_type": "STATIC",
         "model_name": "Heavy Duty Scaffolding Tower",
         "daily_rate": 45.0,
@@ -34,7 +34,7 @@
         "status": "AVAILABLE"
     },
     {
-        "asset_id": "EQ-1004",
+        "asset_id": null,
         "equipment_type": "POWERED",
         "model_name": "Wacker Neuson Light Tower",
         "daily_rate": 120.0,
@@ -47,7 +47,7 @@
         "current_fuel_gal": 22.0
     },
     {
-        "asset_id": "EQ-1005",
+        "asset_id": null,
         "equipment_type": "POWERED",
         "model_name": "Bobcat S650 Skid Steer",
         "daily_rate": 275.0,
@@ -60,7 +60,7 @@
         "current_fuel_gal": 23.5
     },
     {
-        "asset_id": "EQ-1006",
+        "asset_id": null,
         "equipment_type": "POWERED",
         "model_name": "John Deere 50G Compact Excavator",
         "daily_rate": 320.0,
@@ -73,7 +73,7 @@
         "current_fuel_gal": 18.5
     },
     {
-        "asset_id": "EQ-1007",
+        "asset_id": null,
         "equipment_type": "POWERED",
         "model_name": "JLG 450AJ Boom Lift",
         "daily_rate": 380.0,
@@ -86,7 +86,7 @@
         "current_fuel_gal": 15.0
     },
     {
-        "asset_id": "EQ-1008",
+        "asset_id": null,
         "equipment_type": "POWERED",
         "model_name": "Skyjack SJ3219 Scissor Lift",
         "daily_rate": 110.0,
@@ -99,7 +99,7 @@
         "current_fuel_gal": 0.0
     },
     {
-        "asset_id": "EQ-1009",
+        "asset_id": null,
         "equipment_type": "STATIC",
         "model_name": "10ft Steel Storage Container",
         "daily_rate": 35.0,
@@ -107,7 +107,7 @@
         "status": "AVAILABLE"
     },
     {
-        "asset_id": "EQ-1010",
+        "asset_id": null,
         "equipment_type": "STATIC",
         "model_name": "20ft Office Container",
         "daily_rate": 60.0,
@@ -115,7 +115,7 @@
         "status": "RENTED"
     },
     {
-        "asset_id": "EQ-1011",
+        "asset_id": null,
         "equipment_type": "POWERED",
         "model_name": "Kubota SVL75-2 Track Loader",
         "daily_rate": 290.0,
@@ -128,7 +128,7 @@
         "current_fuel_gal": 20.0
     },
     {
-        "asset_id": "EQ-1012",
+        "asset_id": null,
         "equipment_type": "POWERED",
         "model_name": "Multiquip 3-Inch Trash Pump",
         "daily_rate": 85.0,
@@ -141,7 +141,7 @@
         "current_fuel_gal": 0.0
     },
     {
-        "asset_id": "EQ-1013",
+        "asset_id": null,
         "equipment_type": "STATIC",
         "model_name": "Temporary Chainlink Fence Panel",
         "daily_rate": 5.0,
@@ -149,7 +149,7 @@
         "status": "AVAILABLE"
     },
     {
-        "asset_id": "EQ-1014",
+        "asset_id": null,
         "equipment_type": "POWERED",
         "model_name": "Hilti TE 3000 Jackhammer",
         "daily_rate": 95.0,
@@ -162,7 +162,7 @@
         "current_fuel_gal": 0.0
     },
     {
-        "asset_id": "EQ-1015",
+        "asset_id": null,
         "equipment_type": "POWERED",
         "model_name": "Atlas Copco XAS 185 Air Compressor",
         "daily_rate": 160.0,
@@ -173,5 +173,29 @@
         "service_interval_hours": 100.0,
         "fuel_capacity_gal": 20.0,
         "current_fuel_gal": 18.5
+    },
+    {
+        "asset_id": null,
+        "equipment_type": "STATIC",
+        "model_name": "MEOW",
+        "daily_rate": 1234.0,
+        "purchase_year": 2006,
+        "status": "AVAILABLE"
+    },
+    {
+        "asset_id": null,
+        "equipment_type": "STATIC",
+        "model_name": "MEOW",
+        "daily_rate": 123.0,
+        "purchase_year": 2006,
+        "status": "AVAILABLE"
+    },
+    {
+        "asset_id": "EQ-3644",
+        "equipment_type": "STATIC",
+        "model_name": "MEOW",
+        "daily_rate": 1234.0,
+        "purchase_year": 2026,
+        "status": "AVAILABLE"
     }
 ]

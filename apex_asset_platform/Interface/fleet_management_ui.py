@@ -11,8 +11,7 @@ def display_fleet_menu() -> None:
     print("1. Add New Equipment")
     print("2. View Fleet Catalog")
     print("3. Search Asset by Tag ID")
-    print("4. Update Equipment Parameters & Status")
-    print("5. Back to Main Menu")
+    print("4. Back to Main Menu")
     print("==================================================")
 
 def fleet_catalog_section(fleet_svc):
@@ -84,7 +83,6 @@ def handle_fleet_management(fleet_svc: FleetService) -> None:
             case "1":
                 print("\n--- Register New Equipment ---")
                 try:
-                    asset_id = input("Enter Asset Tag ID (e.g. EQ-1011): ").strip()
                     cat_input = input("Enter Category (STATIC / POWERED): ").strip().upper()
                     model_name = input("Enter Model Name: ").strip()
                     daily_rate = float(input("Enter Daily Rate ($): ").strip())
@@ -96,7 +94,6 @@ def handle_fleet_management(fleet_svc: FleetService) -> None:
                         fuel_capacity = float(input("Enter Fuel Tank Capacity (Gallons): ").strip())
 
                         equipment = PoweredEquipment(
-                            asset_id=asset_id,
                             model_name=model_name,
                             daily_rate=daily_rate,
                             purchase_year=purchase_year,
@@ -109,7 +106,6 @@ def handle_fleet_management(fleet_svc: FleetService) -> None:
                         )
                     else:
                         equipment = BaseEquipment(
-                            asset_id=asset_id,
                             model_name=model_name,
                             daily_rate=daily_rate,
                             purchase_year=purchase_year,
@@ -135,10 +131,6 @@ def handle_fleet_management(fleet_svc: FleetService) -> None:
                     print(f"\nERROR: {err}\n")
 
             case "4":
-
-                pass
-
-            case "5":
                 print("\nReturning to Main Operator Menu...\n")
                 break
 

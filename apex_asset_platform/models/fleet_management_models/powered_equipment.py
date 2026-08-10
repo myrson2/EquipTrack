@@ -14,11 +14,11 @@ class PoweredEquipment(BaseEquipment):
 
     def __init__(
         self,
-        asset_id: str,
         model_name: str,
         daily_rate: float,
         purchase_year: int,
         status: EquipmentStatus | str = EquipmentStatus.AVAILABLE,
+        asset_id: str | None = None,
         current_hours: float = 0.0,
         hours_at_last_service: float = 0.0,
         service_interval_hours: float = 100.0,
@@ -39,7 +39,7 @@ class PoweredEquipment(BaseEquipment):
             fuel_capacity_gallons (float): Fuel tank capacity in gallons. Defaults to 0.0.
             current_fuel_gal (float): Initial fuel level in gallons. Defaults to 0.0.
         """
-        super().__init__(asset_id, model_name, daily_rate, purchase_year, status)
+        super().__init__(model_name, daily_rate, purchase_year, status, asset_id)
         self.equipment_type = EquipmentType.POWERED
         self.current_hours = current_hours
         self.hours_at_last_service = hours_at_last_service

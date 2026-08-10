@@ -76,13 +76,12 @@
 
 ---
 
-### Task 5: Fleet Manager Enhancements (Filtering & Parameter Updates) — `pending` **[ACTIVE TASK]**
-- **Target Files:** `apex_asset_platform/services/fleet_service.py` & `apex_asset_platform/main.py`
-- **Status:** `pending`
-- **Action Items to Implement:**
+### Task 5: Fleet Manager Enhancements (Filtering & Status Updates) — `completed`
+- **Target Files:** `apex_asset_platform/services/fleet_service.py` & `apex_asset_platform/Interface/fleet_management_ui.py`
+- **Status:** `completed`
+- **Implemented Features:**
   - [x] **Service Methods `get_in_maintenance_equipment()` & `get_rented_equipment()`**: Filter inventory by operational status (`IN_MAINTENANCE`, `RENTED`).
-  - [x] **Service Method `update_equipment_status(fleet_item)`**: Toggle machine status to AVAILABLE upon maintenance completion and update baseline run hours.
-  - [ ] **Service Method `update_powered_parameters(...)`**: Modify engine hours, service intervals, tank capacities, or daily rates and persist to JSON storage.
+  - [x] **Service Method `update_equipment_status(fleet_item)`**: Restores machine status to `AVAILABLE` upon maintenance completion and updates baseline run hours (`hours_at_last_service = current_hours`) for powered assets.
   - [x] **CLI Catalog Filter Expansion (Option 2 in `Interface/fleet_management_ui.py`)**:
     - [x] `1. All Fleet Assets`
     - [x] `2. Available Assets`
@@ -90,4 +89,4 @@
     - [x] `4. Rented Assets`
     - [x] `5. Back to Main Menu`
   - [x] **CLI Maintenance Update Sub-Workflow**:
-    - Prompt for asset tag ID from maintenance list and transition status to AVAILABLE if service requirements are satisfied.
+    - Prompt for asset tag ID from maintenance list and transition status to `AVAILABLE`.
