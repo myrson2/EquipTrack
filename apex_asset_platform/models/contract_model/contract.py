@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any
 
 
@@ -414,7 +415,14 @@ class Contract:
         Returns:
             int: Number of overdue days (0 if returned on time or early).
         """
-        pass
+        date_to_check = return_date_str or self.actual_return_date or datetime.now().strftime("%Y-%m-%d")
+        try:
+            return_data_in_datetime = datetime.strptime(date_to_check, "%Y-%m-%d")
+            end_date = datetime.strptime(self.planned_end_date, "%Y-%m-%d")
+            result = (return_data_in_datetime - end_date).days
+            return max(0, result)
+        except ValueError:
+            return 0
 
     def close_contract(
         self,
@@ -431,7 +439,21 @@ class Contract:
             fuel_returned_gal (float, optional): Gallons of fuel in tank at return. Defaults to 0.0.
             fuel_fee_per_gal (float, optional): Refueling surcharge fee per missing gallon. Defaults to 5.0.
         """
-        pass
+        self.actual_return_date = actual_return_date
+        self.return_hours = return_hours
+        self.fuel_returned_gal = fuel_returned_gal
+
+        # 1. Calculate overdue late fee penalty
+        overdue_days = self.calculate_overdue_days(actual_return_date)
+        late_fee = overdue_days * (self.daily_rate * 1.5) if overdue_days > 0 else 0.0
+
+        # 2. Calculate refueling surcharge penalty ($5.00/gal missing + $50 flat fee)
+        missing_fuel = max(0.0, self.fuel_at_dispatch_gal - fuel_returned_gal)
+        fuel_fee = (missing_fuel * fuel_fee_per_gal) + (50.0 if missing_fuel > 0 else 0.0)
+
+        # 3. Save total penalty fees and update status to CLOSED
+        self.penalty_fees = late_fee + fuel_fee
+        self.status = "CLOSED"
 
     def to_dict(self) -> dict[str, Any]:
         """Serializes contract attributes into a JSON-compatible dictionary.
@@ -439,7 +461,22 @@ class Contract:
         Returns:
             dict[str, Any]: Dictionary containing contract fields.
         """
-        pass
+        return {
+            "contract_id": self.contract_id,
+            "customer_id": self.customer_id,
+            "asset_id": self.asset_id,
+            "start_date": self.start_date,
+            "planned_end_date": self.planned_end_date,
+            "actual_return_date": self.actual_return_date if self.actual_return_date else "",
+            "initial_hours": str(self.initial_hours),
+            "return_hours": str(self.return_hours) if self.return_hours is not None else "",
+            "fuel_at_dispatch_gal": str(self.fuel_at_dispatch_gal),
+            "fuel_returned_gal": str(self.fuel_returned_gal) if self.fuel_returned_gal is not None else "",
+            "daily_rate": f"{self.daily_rate:.2f}",
+            "base_cost": f"{self.base_cost:.2f}",
+            "penalty_fees": f"{self.penalty_fees:.2f}",
+            "status": self.status,
+        }
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Contract":
@@ -451,7 +488,35 @@ class Contract:
         Returns:
             Contract: Reconstructed Contract model instance.
         """
-        pass
+        def parse_float(val: Any) -> float:
+            if val is None or str(val).strip() == "":
+                return 0.0
+            return float(val)
+
+        def parse_optional_float(val: Any) -> float | None:
+            if val is None or str(val).strip() == "":
+                return None
+            return float(val)
+
+        actual_ret = data.get("actual_return_date")
+        actual_ret_clean = str(actual_ret).strip() if actual_ret and str(actual_ret).strip() else None
+
+        return cls(
+            contract_id=str(data["contract_id"]),
+            customer_id=str(data["customer_id"]),
+            asset_id=str(data["asset_id"]),
+            start_date=str(data["start_date"]),
+            planned_end_date=str(data["planned_end_date"]),
+            actual_return_date=actual_ret_clean,
+            initial_hours=parse_float(data.get("initial_hours", 0.0)),
+            return_hours=parse_optional_float(data.get("return_hours")),
+            fuel_at_dispatch_gal=parse_float(data.get("fuel_at_dispatch_gal", 0.0)),
+            fuel_returned_gal=parse_optional_float(data.get("fuel_returned_gal")),
+            daily_rate=parse_float(data.get("daily_rate", 0.0)),
+            base_cost=parse_float(data.get("base_cost", 0.0)),
+            penalty_fees=parse_float(data.get("penalty_fees", 0.0)),
+            status=str(data.get("status", "ACTIVE")),
+        )
 
     def __repr__(self) -> str:
         """Returns string representation for developers.

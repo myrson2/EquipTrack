@@ -4,8 +4,11 @@ import exceptions.custom_exceptions as custom_exceptions
 import repositories.json_repository as json_repository
 from Interface.customer_management_ui import handle_customer_management
 from Interface.fleet_management_ui import handle_fleet_management
+from Interface.rentail_management_ui import handle_rental_service
 from services.customer_service import CustomerService
 from services.fleet_service import FleetService
+from services.rental_service import RentalService
+
 
 def display_menu() -> None:
     """Displays the main terminal operator navigation menu."""
@@ -19,7 +22,6 @@ def display_menu() -> None:
     print("5. Reports & Analytics")
     print("6. System Exit")
     print("==================================================")
-
 
 def load_repository(file_path: Path) -> None:
     """Initializes persistent storage directory from data_sample CSV files if missing.
@@ -49,9 +51,11 @@ def main() -> None:
     fleet_repo = json_repository.JSONRepository(Path("storage/fleet.json"))
     mtn_repo = json_repository.JSONRepository(Path("storage/maintenance.json"))
     customer_repo = json_repository.JSONRepository(Path("storage/customers.json"))
+    contract_repo = json_repository.JSONRepository(Path("storage/contracts.json"))
 
     fleet_svc = FleetService(fleet_repository=fleet_repo, maintenance_repository=mtn_repo)
     customer_svc = CustomerService(customer_repository=customer_repo)
+    rental_svc = RentalService(contract_repository=contract_repo)
 
     while True:
         display_menu()
@@ -67,7 +71,7 @@ def main() -> None:
             case "2":
                 handle_customer_management(customer_svc)
             case "3":
-                print("\nOpening Rental Desk...\n")
+                handle_rental_service(rental_svc)
             case "4":
                 print("\nOpening Service & Maintenance Operations...\n")
             case "5":

@@ -50,10 +50,10 @@ The **Rental Operations Module (Rental Desk)** is the central transaction engine
   - [x] Defined `Contract` domain entity class binding a customer and an equipment asset.
   - [x] Implemented attributes matching JSON schema: `contract_id` (str), `customer_id` (str), `asset_id` (str), `start_date` (str), `planned_end_date` (str), `actual_return_date` (str | None), `initial_hours` (float), `return_hours` (float | None), `fuel_at_dispatch_gal` (float), `fuel_returned_gal` (float | None), `daily_rate` (float), `base_cost` (float), `penalty_fees` (float), `status` (str - `ACTIVE`, `CLOSED`, `CANCELLED`).
   - [x] Implemented encapsulation via `@property` getters and setters with input boundary validation.
-  - [x] Implemented `close_contract(return_date, final_hours, fuel_returned, fuel_fee_per_gal)` to calculate overdue days, refueling surcharges, and update status to `CLOSED`.
-  - [x] Implemented `calculate_overdue_days() -> int`.
+  - [x] Implemented `close_contract(actual_return_date, return_hours, fuel_returned_gal, fuel_fee_per_gal)` to calculate overdue days, refueling surcharges ($5/gal + $50 flat fee), update `penalty_fees`, and set status to `CLOSED`.
+  - [x] Implemented `calculate_overdue_days(return_date_str) -> int` with fallback to `actual_return_date` or current date.
   - [x] Implemented `to_dict() -> dict` and `@classmethod from_dict(data: dict) -> Contract` with safe string float parsing.
-  - [x] Implemented magic methods: `__repr__`, `__str__`, `__eq__`.
+  - [x] Implemented magic methods: `__repr__`, `__str__` (CLI formatting), `__eq__` (ID comparison).
   - [x] Included complete Google-style docstrings (`Args:` & `Returns:`).
 
 ---
