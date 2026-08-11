@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class Customer:
     """Domain model representing a business client registered for equipment rentals.
 

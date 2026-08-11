@@ -1,5 +1,30 @@
 # Rental Operations Tasks & Implementation Plan
 
+## Project Background & Module Overview 🚜
+
+The **Rental Operations Module (Rental Desk)** is the central transaction engine of the **Apex Asset Operations Platform (AAOP)**. It binds registered business customers ([`Customer`](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/models/customer_model/customer.py)) to available machinery ([`BaseEquipment`](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/models/fleet_management_models/base_equipment.py) / [`PoweredEquipment`](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/models/fleet_management_models/powered_equipment.py)) through formal, immutable rental agreements ([`Contract`](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/models/contract.py)).
+
+### Primary Objectives & Workflows to Build
+
+1. **Equipment Dispatch Workflow (Issuing Contracts):**
+   - Verify customer eligibility: Block customers flagged with an unpaid balance (`has_unpaid_balance == True`).
+   - Verify machine availability: Block machinery marked `RENTED` or `IN_MAINTENANCE`.
+   - Issue Contract: Lock starting engine run-hours (`initial_hours`), calculate base cost (`daily_rate * duration_days`), transition machine status to `RENTED`, and generate unique Contract ID tag (`CON-XXXX`).
+
+2. **Equipment Return & Checkout Workflow:**
+   - Record actual return metrics: Capture return date, current hour-meter reading (`return_hours`), and returned fuel levels.
+   - Calculate Automated Surcharges & Penalties:
+     - **Late Surcharge:** Standard daily rate + 50% penalty per overdue day.
+     - **Refueling Penalty:** Missing fuel cost + flat $50 re-servicing fee.
+   - Maintenance Auto-Flagging: If machine accumulated operating hours cross maintenance threshold (`current_hours - last_service_hours >= interval`), automatically transition status to `IN_MAINTENANCE`.
+   - Update Customer Standing: If final return balance is unpaid, mark customer as `has_unpaid_balance = True`.
+   - Restore Inventory: Return machine status to `AVAILABLE` (or `IN_MAINTENANCE`) and commit state changes to JSON disk storage (`contracts.json`, `fleet.json`, `customers.json`).
+
+3. **Rental Desk Terminal Interface (`Interface/rental_desk_ui.py`):**
+   - Interactive CLI sub-menu for dispatching equipment, processing returns, viewing active agreements, and searching contract receipts by ID.
+
+---
+
 ## Workflow Rule: Strict Sequential Progression
 > [!IMPORTANT]
 > Tasks must be completed in order. Task N+1 remains locked until Task N is fully completed, clean, verified without errors, and documented with docstrings (`Args:` & `Returns:`).
@@ -10,26 +35,26 @@
 
 | Task | File Target | Status | Progression |
 | :--- | :--- | :--- | :--- |
-| **Task 1: Contract Domain Model** | `models/contract.py` | `pending` | **[ACTIVE TASK]** |
-| **Task 2: Rental Service Layer** | `services/rental_service.py` | `pending` | Locked |
+| **Task 1: Contract Domain Model** | `models/contract_model/contract.py` | `completed` | Finished |
+| **Task 2: Rental Service Layer** | `services/rental_service.py` | `pending` | **[ACTIVE TASK]** |
 | **Task 3: Rental Desk CLI Interface** | `Interface/rental_desk_ui.py` & `main.py` | `pending` | Locked |
 
 ---
 
 ## Task Details
 
-### Task 1: Contract Domain Model (`Contract`) — `pending`
-- **Target File:** `apex_asset_platform/models/contract.py`
-- **Status:** `pending`
-- **Required Features:**
-  - [ ] Define `Contract` domain entity class binding a customer and an equipment asset.
-  - [ ] Implement attributes: `contract_id` (str), `customer_id` (str), `asset_id` (str), `start_date` (datetime/str), `planned_end_date` (datetime/str), `actual_return_date` (datetime/str | None), `initial_hours` (float), `return_hours` (float | None), `base_cost` (float), `penalty_fees` (float), `status` (str - `ACTIVE`, `CLOSED`, `CANCELLED`).
-  - [ ] Implement encapsulation via `@property` getters and setters with input validation.
-  - [ ] Implement `close_contract(return_date, final_hours, fuel_returned, fuel_fee_per_gal)` to calculate overdue days, usage overages, refueling surcharges, and update contract standing.
-  - [ ] Implement `calculate_overdue_days() -> int`.
-  - [ ] Implement `to_dict() -> dict` and `@classmethod from_dict(data: dict) -> Contract`.
-  - [ ] Implement magic methods: `__repr__`, `__str__`, `__eq__`.
-  - [ ] Include complete Google-style docstrings (`Args:` & `Returns:`).
+### Task 1: Contract Domain Model (`Contract`) — `completed`
+- **Target File:** `apex_asset_platform/models/contract_model/contract.py`
+- **Status:** `completed`
+- **Implemented Features:**
+  - [x] Defined `Contract` domain entity class binding a customer and an equipment asset.
+  - [x] Implemented attributes matching JSON schema: `contract_id` (str), `customer_id` (str), `asset_id` (str), `start_date` (str), `planned_end_date` (str), `actual_return_date` (str | None), `initial_hours` (float), `return_hours` (float | None), `fuel_at_dispatch_gal` (float), `fuel_returned_gal` (float | None), `daily_rate` (float), `base_cost` (float), `penalty_fees` (float), `status` (str - `ACTIVE`, `CLOSED`, `CANCELLED`).
+  - [x] Implemented encapsulation via `@property` getters and setters with input boundary validation.
+  - [x] Implemented `close_contract(return_date, final_hours, fuel_returned, fuel_fee_per_gal)` to calculate overdue days, refueling surcharges, and update status to `CLOSED`.
+  - [x] Implemented `calculate_overdue_days() -> int`.
+  - [x] Implemented `to_dict() -> dict` and `@classmethod from_dict(data: dict) -> Contract` with safe string float parsing.
+  - [x] Implemented magic methods: `__repr__`, `__str__`, `__eq__`.
+  - [x] Included complete Google-style docstrings (`Args:` & `Returns:`).
 
 ---
 

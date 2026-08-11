@@ -3,7 +3,6 @@ from typing import Any
 from models.customer_model.customer import Customer
 from repositories.json_repository import JSONRepository
 from utils.validators import gmail_validator, phone_validator, validate_unique_ids
-1
 
 def customer_id_generator() -> str:
     """Generates a random customer ID.

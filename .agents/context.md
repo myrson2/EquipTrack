@@ -128,8 +128,22 @@ This document records all key topics, architectural discussions, decisions, and 
 
 ---
 
-### 12. Active Focus: Rental Operations & Transaction Lifecycle
-- **Next Milestone:** Implement `Contract` domain model (`models/contract.py`), `RentalService` (`services/rental_service.py`), and `RentalDeskUI` sub-menu (`Interface/rental_desk_ui.py`).
+### 13. Persona Guidelines & Autocomplete Rule Refinements
+- **Location:** [AGENTS.md](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/AGENTS.md#L83-L91)
+- **Key Guideline Updates:**
+  - **Strict Function Autocomplete Permission:** Added explicit exception rule: `__init__` and magic methods (`__repr__`, `__str__`, `__eq__`, `__lt__`) are fully autocompleted by default. All other unconfirmed domain/business logic methods remain as `pass` stubs to guide the user via the Socratic method.
+  - **Senior Developer Architectural Insights & Tradeoffs:** Combined child-friendly real-world analogies with Senior Developer architectural tradeoff analysis (explaining *why* concepts are useful, pros vs. cons, and enterprise design patterns).
+
+---
+
+### 14. Contract Domain Model (`Contract`) Implementation
+- **Location:** [contract.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/models/contract_model/contract.py)
+- **Key Concepts & Features:**
+  - **JSON Schema Alignment:** Defined 12 core attributes (`contract_id`, `customer_id`, `asset_id`, `start_date`, `planned_end_date`, `actual_return_date`, `initial_hours`, `return_hours`, `fuel_at_dispatch_gal`, `fuel_returned_gal`, `daily_rate`, `base_cost`, `penalty_fees`, `status`).
+  - **Encapsulated `@property` Boundary Defenses:** Implemented getters and setters enforcing non-empty string ID checks, non-negative float validation for rates/hours/fees, and valid status state machine choices (`ACTIVE`, `CLOSED`, `CANCELLED`).
+  - **Magic Methods:** Autocompleted `__init__`, `__repr__` (developer inspection), `__str__` (operator CLI summary formatting), and `__eq__` (equality by `contract_id`).
+  - **Business Logic Stubs:** Created `pass` stubs for `calculate_overdue_days()`, `close_contract()`, `to_dict()`, and `@classmethod from_dict()`.
+
 
 
 
