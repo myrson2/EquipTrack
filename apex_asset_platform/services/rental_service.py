@@ -8,7 +8,6 @@ from services.customer_service import CustomerService
 from services.fleet_service import FleetService
 from utils.validators import validate_unique_ids
 
-
 def get_end_date_using_duration_date(duration_days: int) -> str:
     """Calculates planned return end date string from duration days."""
     end_date = datetime.now() + timedelta(days=duration_days)
