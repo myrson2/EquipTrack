@@ -34,7 +34,7 @@ class CustomerService:
             each_cust = Customer.from_dict(customer)
             self.customer_list.append(each_cust)
 
-    def _save_customer_cache(self) -> None:
+    def save_customer_cache(self) -> None:
         """Serializes in-memory Customer object instances back to JSON disk storage."""
         serialized_data = [item.to_dict() for item in self.customer_list]
         self.customer_repository.save_all(serialized_data)

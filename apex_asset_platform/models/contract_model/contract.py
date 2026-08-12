@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import Any
 
-
 class Contract:
     """Domain model representing a binding rental agreement between a customer and an equipment asset.
 

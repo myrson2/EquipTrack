@@ -58,26 +58,25 @@ The **Rental Operations Module (Rental Desk)** is the central transaction engine
 
 ---
 
-### Task 2: Rental Service Layer (`RentalService`) — `pending`
+### Task 2: Rental Service Layer (`RentalService`) — `completed`
 - **Target File:** `apex_asset_platform/services/rental_service.py`
-- **Status:** `pending`
-- **Required Features:**
-  - [ ] Create `RentalService` class injected with `FleetService`, `CustomerService`, and `JSONRepository(Path("storage/contracts.json"))`.
-  - [ ] Implement `_load_contract_cache()` and `_save_contract_cache()`.
-  - [ ] Implement `create_contract(customer_id: str, asset_id: str, duration_days: int) -> Contract`:
-    - Check customer credit standing (`has_unpaid_balance == False`).
-    - Check equipment availability (`status == AVAILABLE`).
-    - Transition equipment state to `RENTED`.
-    - Generate unique Contract ID (`CON-XXXX`) and save state.
-  - [ ] Implement `process_return(contract_id: str, return_hours: float, fuel_returned: float, return_date: str) -> Contract`:
-    - Look up active contract.
-    - Calculate penalties and close contract.
-    - Check machine operating hours and auto-flag maintenance if interval exceeded.
-    - Update customer delinquency standing if balance is unpaid.
-    - Transition equipment status to `AVAILABLE` (or `IN_MAINTENANCE`).
-    - Persist updated states to JSON storage files.
-  - [ ] Implement `get_active_contracts() -> list[Contract]` and `get_contract_by_id(contract_id: str) -> Contract`.
-  - [ ] Include complete Google-style docstrings (`Args:` & `Returns:`).
+- **Status:** `completed`
+- **Implemented Features:**
+  - [x] Created `RentalService` class injected with `FleetService`, `CustomerService`, and `JSONRepository(Path("storage/contracts.json"))`.
+  - [x] Implemented `_load_contract_cache()` and `_save_contract_cache()`.
+  - [x] Implemented `create_contract(customer_id: str, asset_id: str, duration_days: int) -> Contract`:
+    - [x] Check customer credit standing (`has_unpaid_balance == False`).
+    - [x] Check equipment availability (`status == AVAILABLE`).
+    - [x] Transition equipment state to `RENTED`.
+    - [x] Generate unique Contract ID (`CNTR-XXXX`) with `validate_unique_ids` and save state to `contracts.json`.
+  - [x] Implemented `process_return(contract_id: str, return_hours: float, fuel_returned_gal: float, date_returned: str, is_paid: bool) -> Contract`:
+    - [x] Look up active contract and verify `status == "ACTIVE"`.
+    - [x] Calculate penalties and close contract via `contract.close_contract(...)`.
+    - [x] Check machine operating hours and auto-flag maintenance if interval exceeded (`requires_service()` $\rightarrow$ `IN_MAINTENANCE` vs `AVAILABLE`).
+    - [x] Update customer delinquency standing if return balance is unpaid (`is_paid == False` $\rightarrow$ `flag_delinquent()`).
+    - [x] Persist updated states to JSON storage files (`contracts.json`, `fleet.json`, `customers.json`).
+  - [x] Implemented `get_active_contracts() -> list[Contract]` and `get_contract_by_id(contract_id: str) -> Contract`.
+  - [x] Included complete Google-style docstrings (`Args:` & `Returns:`).
 
 ---
 

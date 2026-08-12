@@ -9,7 +9,8 @@ def validate_unique_ids(generated_id: str, instance_list: list) -> bool:
         bool: True if generated_id is unique (not found in list), False otherwise.
     """
     for item in instance_list:
-        item_id = getattr(item, "customer_id", getattr(item, "asset_id", None))
+        item_id = getattr(item, "customer_id", None) or getattr(item, "asset_id", None) or getattr(item, "contract_id", None)
+
         if item_id == generated_id:
             return False
     return True

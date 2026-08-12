@@ -241,6 +241,10 @@ class BaseEquipment:
         """Updates the operational status to AVAILABLE."""
         self.status = EquipmentStatus.AVAILABLE
 
+    def mark_rented(self) -> None:
+        """Updates the operational status to RENTED."""
+        self.status = EquipmentStatus.RENTED
+
     def to_dict(self) -> dict:
         """Serializes the equipment object to a dictionary for JSON persistence.
 

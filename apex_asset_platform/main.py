@@ -55,7 +55,7 @@ def main() -> None:
 
     fleet_svc = FleetService(fleet_repository=fleet_repo, maintenance_repository=mtn_repo)
     customer_svc = CustomerService(customer_repository=customer_repo)
-    rental_svc = RentalService(contract_repository=contract_repo)
+    rental_svc = RentalService(contract_repository=contract_repo, fleet_service=fleet_svc, customer_service=customer_svc)
 
     while True:
         display_menu()
