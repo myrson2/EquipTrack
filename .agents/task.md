@@ -36,8 +36,9 @@ The **Rental Operations Module (Rental Desk)** is the central transaction engine
 | Task | File Target | Status | Progression |
 | :--- | :--- | :--- | :--- |
 | **Task 1: Contract Domain Model** | `models/contract_model/contract.py` | `completed` | Finished |
-| **Task 2: Rental Service Layer** | `services/rental_service.py` | `pending` | **[ACTIVE TASK]** |
-| **Task 3: Rental Desk CLI Interface** | `Interface/rental_desk_ui.py` & `main.py` | `pending` | Locked |
+| **Task 2: Rental Service Layer** | `services/rental_service.py` | `completed` | Finished |
+| **Task 3: Rental Desk CLI Interface** | `Interface/rental_management_ui.py` & `main.py` | `completed` | Finished |
+| **Task 4: Maintenance & Service Operations** | `services/fleet_service.py` & `Interface/service_operations_ui.py` | `pending` | **[NEXT TASK]** |
 
 ---
 
@@ -80,16 +81,16 @@ The **Rental Operations Module (Rental Desk)** is the central transaction engine
 
 ---
 
-### Task 3: Rental Desk CLI Interface — `pending`
-- **Target Files:** `apex_asset_platform/Interface/rental_desk_ui.py` & `apex_asset_platform/main.py`
-- **Status:** `pending`
-- **Required Features:**
-  - [ ] Create interactive Rental Desk sub-menu (`display_rental_menu()`).
-  - [ ] Connect CLI sub-options:
-    - [ ] `1. Dispatch / Issue Rental Contract`
-    - [ ] `2. Process Equipment Return & Checkout`
-    - [ ] `3. View Active Rental Agreements`
-    - [ ] `4. Search Contract by ID`
-    - [ ] `5. Back to Main Menu`
-  - [ ] Hook `RentalService` into `main.py` under main menu Option `3. Rental Desk (Dispatch & Return)`.
-  - [ ] Handle input validation and display detailed billing summaries.
+### Task 3: Rental Desk CLI Interface — `completed`
+- **Target Files:** `apex_asset_platform/Interface/rental_management_ui.py` & `apex_asset_platform/main.py`
+- **Status:** `completed`
+- **Implemented Features:**
+  - [x] Created interactive Rental Desk sub-menu (`display_rental_menu()`).
+  - [x] Connected CLI sub-options structure:
+    - [x] `1. Dispatch / Issue Rental Contract`
+    - [x] `2. Process Equipment Return & Checkout`
+    - [x] `3. View Active Rental Agreements`
+    - [x] `4. Search Contract by ID`
+    - [x] `5. Back to Main Menu`
+  - [x] Hooked `RentalService` into `main.py` under main menu Option `3. Rental Desk (Dispatch & Return)`.
+  - [x] Handled input validation, defensive prompts, and billing summaries.

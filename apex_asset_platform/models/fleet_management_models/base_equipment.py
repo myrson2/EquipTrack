@@ -81,7 +81,9 @@ class BaseEquipment:
         """
         if not isinstance(other, BaseEquipment):
             return NotImplemented
-        return self.asset_id < other.asset_id
+        id_self = self.asset_id or ""
+        id_other = other.asset_id or ""
+        return id_self < id_other
 
     # @property
     # def asset_id(self) -> str:
@@ -242,7 +244,7 @@ class BaseEquipment:
         self.status = EquipmentStatus.AVAILABLE
 
     def mark_rented(self) -> None:
-        """Updates the operational status to RENTED."""
+        """Updates the operational status to RENT."""
         self.status = EquipmentStatus.RENTED
 
     def to_dict(self) -> dict:

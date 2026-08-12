@@ -4,7 +4,7 @@ import exceptions.custom_exceptions as custom_exceptions
 import repositories.json_repository as json_repository
 from Interface.customer_management_ui import handle_customer_management
 from Interface.fleet_management_ui import handle_fleet_management
-from Interface.rentail_management_ui import handle_rental_service
+from Interface.rental_management_ui import handle_rental_service
 from services.customer_service import CustomerService
 from services.fleet_service import FleetService
 from services.rental_service import RentalService

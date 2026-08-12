@@ -130,48 +130,56 @@ class RentalService:
         self._save_contract_cache()
         return new_contract
 
-    def process_return(self, contract_id: str, return_hours: float, fuel_returned_gal: float, date_returned: str, is_paid=True) -> Contract:
-            # Check first if the contract is active or not, return error if not
-            contract = self.get_contract_by_id(contract_id)
-            if not contract:
-                raise ValueError(f"Contract with ID '{contract_id}' was not found.")
+    def process_return(
+        self,
+        contract_id: str,
+        return_hours: float,
+        fuel_returned_gal: float = 0.0,
+        date_returned: str | None = None,
+        is_paid: bool = True,
+    ) -> Contract:
+        actual_date = date_returned or datetime.now().strftime("%Y-%m-%d")
+        # Check first if the contract is active or not, return error if not
+        contract = self.get_contract_by_id(contract_id)
+        if not contract:
+            raise ValueError(f"Contract with ID '{contract_id}' was not found.")
 
-            if contract.status != "ACTIVE":
-                raise ValueError(f"Contract with ID '{contract_id}' was not Active.")
+        if contract.status != "ACTIVE":
+            raise ValueError(f"Contract with ID '{contract_id}' was not Active.")
 
-            # Update the return_hours of the equipment
-            equipment = self.fleet_service.get_equipment_by_id(contract.asset_id)
-            if not equipment:
-                raise ValueError(f"Equipment asset '{contract.asset_id}' not found.")
+        # Update the return_hours of the equipment
+        equipment = self.fleet_service.get_equipment_by_id(contract.asset_id)
+        if not equipment:
+            raise ValueError(f"Equipment asset '{contract.asset_id}' not found.")
 
-            # 2. Update engine attributes ONLY if the equipment is powered!
-            if isinstance(equipment, PoweredEquipment):
-                equipment.current_hours = return_hours
-                equipment.current_fuel_gal = fuel_returned_gal
+        # 2. Update engine attributes ONLY if the equipment is powered!
+        if isinstance(equipment, PoweredEquipment):
+            equipment.current_hours = return_hours
+            equipment.current_fuel_gal = fuel_returned_gal
 
-                # 3. Check maintenance threshold using domain method!
-                if equipment.requires_service():
-                    equipment.status = "IN_MAINTENANCE"
-                else:
-                    equipment.status = "AVAILABLE"
+            # 3. Check maintenance threshold using domain method!
+            if equipment.requires_service():
+                equipment.status = "IN_MAINTENANCE"
             else:
-                # Static equipment goes straight back to AVAILABLE!
                 equipment.status = "AVAILABLE"
+        else:
+            # Static equipment goes straight back to AVAILABLE!
+            equipment.status = "AVAILABLE"
 
-            # Call Close Contract
-            contract.close_contract(date_returned, return_hours, fuel_returned_gal)
+        # Call Close Contract
+        contract.close_contract(actual_date, return_hours, fuel_returned_gal)
 
-            # Check Customer if paid or not
-            customer = self.customer_service.get_customer_by_id(contract.customer_id)
-            if customer and not is_paid:
-                customer.flag_delinquent()
+        # Check Customer if paid or not
+        customer = self.customer_service.get_customer_by_id(contract.customer_id)
+        if customer and not is_paid:
+            customer.flag_delinquent()
 
-            # Save Files
-            self._save_contract_cache()
-            self.fleet_service.save_equipment_list_to_storage()
-            self.customer_service.save_customer_cache()
+        # Save Files
+        self._save_contract_cache()
+        self.fleet_service.save_equipment_list_to_storage()
+        self.customer_service.save_customer_cache()
 
-            return contract
+        return contract
 
 
 
