@@ -5,12 +5,12 @@
         "model_name": "Cat 320 Hydraulic Excavator",
         "daily_rate": 450.0,
         "purchase_year": 2022,
-        "status": "IN_MAINTENANCE",
-        "current_hours": 500.0,
+        "status": "AVAILABLE",
+        "current_hours": 180.5,
         "hours_at_last_service": 100.0,
         "service_interval_hours": 100.0,
         "fuel_capacity_gal": 80.0,
-        "current_fuel_gal": 30.0
+        "current_fuel_gal": 80.0
     },
     {
         "asset_id": "EQ-1002",

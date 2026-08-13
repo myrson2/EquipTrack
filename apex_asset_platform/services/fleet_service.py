@@ -1,3 +1,4 @@
+from apex_asset_platform.services.maintenance_service import MaintenanceService
 import random
 from models.fleet_management_models.base_equipment import BaseEquipment, EquipmentType, EquipmentStatus
 from models.fleet_management_models.powered_equipment import PoweredEquipment
@@ -16,14 +17,15 @@ class FleetService:
         equipment_list (list[BaseEquipment]): In-memory cache of fleet machinery instances.
     """
 
-    def __init__(self, fleet_repository: JSONRepository, maintenance_repository: JSONRepository) -> None:
+    def __init__(self, fleet_repository: JSONRepository, maintenance_service: 'MaintenanceService') -> None:
         """Initializes FleetService with repository dependency injection and loads in-memory catalog.
 
         Args:
             fleet_repository (JSONRepository): Persistent JSON storage repository instance.
+            maintenance_service (MaintenanceService): Service for managing maintenance operations.
         """
         self.fleet_repository = fleet_repository
-        self.maintenance_repository = maintenance_repository
+        self.maintenance_service = maintenance_service
         self.equipment_list: list[BaseEquipment] = []
         self._load_initial_fleet()
 
@@ -55,7 +57,7 @@ class FleetService:
                 )
             self.equipment_list.append(obj)
 
-    def save_equipment_list_to_storage(self) -> None:
+    def save_fleet_cache(self) -> None:
         """Persists all in-memory equipment objects back to JSON disk storage."""
         serialized_data = [item.to_dict() for item in self.equipment_list]
         self.fleet_repository.save_all(serialized_data)

@@ -23,16 +23,18 @@ apex_asset_platform/
 │
 ├── Interface/                  # Terminal User Interface modules
 │   ├── fleet_management_ui.py  # Fleet catalog & maintenance UI handlers
-│   └── customer_management_ui.py# Customer account registration & filtering UI
+│   ├── customer_management_ui.py# Customer account registration & filtering UI
+│   └── rental_management_ui.py # Rental Desk dispatch, return & contract lookup UI
 │
 ├── models/                     # Core domain entities (Encapsulated OOP)
+│   ├── contract_model/
+│   │   └── contract.py         # Rental agreement domain model (encapsulated @property getters/setters)
 │   ├── customer_model/
 │   │   └── customer.py         # Customer account domain model (@property getters/setters)
 │   ├── fleet_management_models/
 │   │   ├── base_equipment.py   # Abstract/Base Equipment class
 │   │   ├── powered_equipment.py# Specialized engine-driven equipment model
 │   │   └── enum.py             # EquipmentStatus & EquipmentType enums
-│   ├── contract.py             # Rental agreement & line-item models
 │   └── maintenance_log.py      # Service event record model
 │
 ├── services/                   # Business logic orchestration layer
@@ -51,7 +53,13 @@ apex_asset_platform/
 │   ├── validators.py           # Unique ID, @gmail.com, and phone format validators
 │   └── formatters.py           # CLI table formatting & currency display
 │
-└── storage/                    # Persistent storage directory
+├── data_sample/                # Initial seed CSV data files
+│   ├── fleet.csv               # Seed equipment inventory CSV
+│   ├── customers.csv           # Seed customer accounts CSV
+│   ├── contracts.csv           # Seed rental contracts CSV
+│   └── maintenance.csv         # Seed maintenance logs CSV
+│
+└── storage/                    # Persistent JSON storage directory
     ├── fleet.json              # Equipment catalog records
     ├── customers.json          # Customer account records
     ├── contracts.json          # Rental history & contract records
@@ -87,9 +95,11 @@ python apex_asset_platform/main.py
 - **Credit Verification & Delinquency Handling**: Track client credit standing (`has_unpaid_balance`) to block delinquent accounts from initiating new rentals.
 - **Status Filtering**: View customer directories filtered by standing (`PAID` / `Good Standing` vs `UNPAID` / `Delinquent`).
 
-### 3. Rental Operations Module *(In Active Development)*
-- **Issue Rental Contract**: Bind registered customers to available equipment for defined rental durations.
-- **Process Return & Billing**: Record return date, meter hours, and fuel levels to automatically calculate late penalties and refueling surcharges.
+### 3. Rental Operations & Checkout Module
+- **Issue Rental Contract**: Bind registered customers to available equipment for defined rental durations, generating unique `CNTR-XXXX` contract receipts.
+- **Process Return & Checkout**: Record actual return date, meter run-hours, and returned fuel levels to automatically calculate late return penalties (1.5x daily rate) and refueling surcharges ($5.00/gal + $50 servicing fee).
+- **Automated State Synchronization**: Seamlessly updates machinery run-hours, auto-flags `IN_MAINTENANCE` status via engine service thresholds (`requires_service()`), and flags customer accounts `UNPAID` / delinquent if return invoices remain unpaid.
+- **Active Agreement Directory & Contract Lookup**: View real-time active contracts currently on rent or perform instant receipt searches by unique Contract ID.
 
 ---
 

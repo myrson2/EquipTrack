@@ -12,7 +12,6 @@ def display_rental_menu() -> None:
     print("5. Back to Main Menu")
     print("==================================================")
 
-
 def handle_rental_service(rental_svc: RentalService | None = None) -> None:
     """Handles interactive operator CLI workflow for Rental Desk operations.
 

@@ -1,10 +1,11 @@
+from apex_asset_platform.services.maintenance_service import MaintenanceService
 from pathlib import Path
 import csv
 import exceptions.custom_exceptions as custom_exceptions
 import repositories.json_repository as json_repository
-from Interface.customer_management_ui import handle_customer_management
-from Interface.fleet_management_ui import handle_fleet_management
-from Interface.rental_management_ui import handle_rental_service
+from interface.customer_management_ui import handle_customer_management
+from interface.fleet_management_ui import handle_fleet_management
+from interface.rental_management_ui import handle_rental_service
 from services.customer_service import CustomerService
 from services.fleet_service import FleetService
 from services.rental_service import RentalService
@@ -45,6 +46,7 @@ def main() -> None:
         data_sample_path = Path("data_sample")
         if data_sample_path.is_dir():
             load_repository(data_sample_path)
+            is_save = True
     except Exception as e:
         print(f"Storage Initialization Notice: {e}")
 
@@ -53,9 +55,16 @@ def main() -> None:
     customer_repo = json_repository.JSONRepository(Path("storage/customers.json"))
     contract_repo = json_repository.JSONRepository(Path("storage/contracts.json"))
 
-    fleet_svc = FleetService(fleet_repository=fleet_repo, maintenance_repository=mtn_repo)
+    mtn_svc = MaintenanceService(maintenance_repository=mtn_repo)
+    fleet_svc = FleetService(fleet_repository=fleet_repo, maintenance_service=mtn_svc)
     customer_svc = CustomerService(customer_repository=customer_repo)
     rental_svc = RentalService(contract_repository=contract_repo, fleet_service=fleet_svc, customer_service=customer_svc)
+    
+    if is_save:
+        fleet_svc.save_fleet_cache()
+        customer_svc.save_customer_cache()
+        rental_svc.save_contract_cache()
+        mtn_svc.save_maintenance_cache()
 
     while True:
         display_menu()

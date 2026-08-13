@@ -37,7 +37,7 @@ class RentalService:
             each_contract = Contract.from_dict(contract)
             self.contract_list.append(each_contract)
 
-    def _save_contract_cache(self) -> None:
+    def save_contract_cache(self) -> None:
         """Serializes Contract objects back to JSON disk storage."""
         serialized_data = [item.to_dict() for item in self.contract_list]
         self.contract_repository.save_all(serialized_data)
