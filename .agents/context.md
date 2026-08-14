@@ -142,7 +142,40 @@ This document records all key topics, architectural discussions, decisions, and 
   - **JSON Schema Alignment:** Defined 12 core attributes (`contract_id`, `customer_id`, `asset_id`, `start_date`, `planned_end_date`, `actual_return_date`, `initial_hours`, `return_hours`, `fuel_at_dispatch_gal`, `fuel_returned_gal`, `daily_rate`, `base_cost`, `penalty_fees`, `status`).
   - **Encapsulated `@property` Boundary Defenses:** Implemented getters and setters enforcing non-empty string ID checks, non-negative float validation for rates/hours/fees, and valid status state machine choices (`ACTIVE`, `CLOSED`, `CANCELLED`).
   - **Magic Methods:** Autocompleted `__init__`, `__repr__` (developer inspection), `__str__` (operator CLI summary formatting), and `__eq__` (equality by `contract_id`).
-  - **Business Logic Stubs:** Created `pass` stubs for `calculate_overdue_days()`, `close_contract()`, `to_dict()`, and `@classmethod from_dict()`.
+
+---
+
+### 15. Rental Desk Operations & Checkout Workflow (`RentalService` & `rental_management_ui.py`)
+- **Locations:**
+  - [rental_service.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/services/rental_service.py)
+  - [rental_management_ui.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/Interface/rental_management_ui.py)
+- **Key Concepts & Features:**
+  - **Dispatch Workflow (`create_contract`):** Validates customer credit standing (`has_unpaid_balance`), asset availability (`AVAILABLE`), binds IDs, generates `CNTR-XXXX` contract receipts, and transitions equipment status to `RENTED`.
+  - **Return Checkout Workflow (`process_return`):** Accepts actual return date, meter run-hours, and returned fuel levels. Calculates pro-rated base costs, overdue late fees (1.5x daily rate), and refueling surcharges ($5.00/gal + $50 servicing fee). Automatically updates machinery run-hours, auto-flags `IN_MAINTENANCE` status via engine service thresholds (`requires_service()`), and flags customer accounts `UNPAID` / delinquent if return invoices remain unpaid.
+  - **Interactive Rental Desk CLI Sub-Menu:** Built options 1 to 5 in `rental_management_ui.py` for dispatching contracts, processing return checkouts, listing active agreements, searching receipts by ID, and returning to the main menu.
+
+---
+
+### 16. Maintenance Log Domain Model (`MaintenanceLog`) Implementation
+- **Location:** [maintenance_log.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/models/maintenance_model/maintenance_log.py)
+- **Key Concepts & Features:**
+  - **JSON Schema Alignment:** Defined 7 core attributes matching `storage/maintenance.json` (`maintenance_id`, `asset_id`, `service_date`, `description`, `cost`, `meter_hours_at_service`, `performed_by`).
+  - **Encapsulated `@property` Boundary Defenses:** Implemented getters/setters with safe float/string type parsing and boundary validation.
+  - **Serialization Methods:** Implemented `to_dict() -> dict` and `@classmethod from_dict(data: dict) -> MaintenanceLog` handling string float conversions.
+  - **Magic Methods:** Autocompleted `__init__`, `__repr__` (debugging), `__str__` (CLI formatting), `__eq__` (ID comparison), and `__lt__` (chronological date sorting for service reports).
+
+---
+
+### 17. Service & Maintenance Operations Sub-Menu (`MaintenanceService` & `maintenance_management_ui.py`)
+- **Locations:**
+  - [maintenance_service.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/services/maintenance_service.py)
+  - [fleet_service.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/services/fleet_service.py)
+  - [maintenance_management_ui.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/Interface/maintenance_management_ui.py)
+  - [main.py](file:///C:/Users/JoseMyrsonOBeros/PycharmProjects/EquipTrack/apex_asset_platform/main.py)
+- **Key Concepts & Features:**
+  - **`MaintenanceService` Layer:** Implemented `_load_maintenance_cache()`, `save_maintenance_cache()`, and `append_maintenance_log(maintenance_log)` for storage persistence in `storage/maintenance.json`.
+  - **`FleetService` Maintenance Completion:** Updated `complete_maintenance(maintenance_log)` to reset run-hour meters (`hours_at_last_service = current_hours`) for powered equipment, restore status to `AVAILABLE`, save `fleet.json`, and delegate log appends to `MaintenanceService`.
+  - **Interactive Service Operations CLI Sub-Menu:** Built options 1 to 5 in `maintenance_management_ui.py` for listing pending maintenance assets, completing repairs and restoring equipment to inventory, manually flagging assets for service, and viewing historical service logs. Hooked to `main.py` Option `4. Service & Maintenance Operations`.
 
 
 

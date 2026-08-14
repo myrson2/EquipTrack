@@ -2,11 +2,28 @@
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Architecture](https://img.shields.io/badge/Architecture-Layered%20OOP-orange.svg)]()
+[![Progress](https://img.shields.io/badge/Completion-80%25-brightgreen.svg)]()
 [![Status](https://img.shields.io/badge/Status-Active%20Development-green.svg)]()
 
 The **Apex Asset Operations Platform (AAOP / EquipTrack)** is an internal fleet management, customer account tracking, and rental transaction platform for industrial heavy machinery (generators, excavators, trenchers, commercial dehumidifiers, and mobile lighting rigs).
 
 Built using pure Python standard library modules, it enforces state transition locks, maintenance cycles based on machine run-hours, custom domain validations, and persistent file-based JSON storage across terminal operator restarts.
+
+---
+
+## 📊 Project Completion Status (80% Completed)
+
+```text
+Overall Platform Completion: [████████████████░░░░] 80%
+```
+
+| Module / System Component | Implementation Status | Completion % | Key Delivered Features |
+| :--- | :---: | :---: | :--- |
+| **1. Customer Accounts & Credit Standing** | `completed` | **100%** | Account registration, `@gmail` / 11-digit phone validation, credit verification, delinquency flagging |
+| **2. Rental Operations & Checkout Desk** | `completed` | **100%** | Dispatch workflow (`CNTR-XXXX`), return checkout, 1.5x late penalties, fuel surcharges ($5/gal + $50 fee), receipt lookup |
+| **3. Service & Maintenance Operations** | `completed` | **100%** | `MaintenanceLog` model & magic methods, mechanic checkout, status restoration, historical logbook history |
+| **4. Fleet Inventory & Equipment Models** | `completed` | **100%** | `BaseEquipment` / `PoweredEquipment` OOP inheritance, status transitions, run-hour & fuel tracking |
+| **5. Reports & Analytics Engine** | `pending` | **0%** | Fleet utilization, revenue yields, and maintenance cost summaries planned |
 
 ---
 

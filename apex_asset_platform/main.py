@@ -1,4 +1,4 @@
-from apex_asset_platform.services.maintenance_service import MaintenanceService
+from services.maintenance_service import MaintenanceService
 from pathlib import Path
 import csv
 import exceptions.custom_exceptions as custom_exceptions
@@ -6,6 +6,7 @@ import repositories.json_repository as json_repository
 from interface.customer_management_ui import handle_customer_management
 from interface.fleet_management_ui import handle_fleet_management
 from interface.rental_management_ui import handle_rental_service
+from interface.maintenance_management_ui import handle_maintenance_operations
 from services.customer_service import CustomerService
 from services.fleet_service import FleetService
 from services.rental_service import RentalService
@@ -82,7 +83,7 @@ def main() -> None:
             case "3":
                 handle_rental_service(rental_svc)
             case "4":
-                print("\nOpening Service & Maintenance Operations...\n")
+                handle_maintenance_operations(fleet_svc, mtn_svc)
             case "5":
                 print("\nOpening Reports & Analytics...\n")
             case "6":

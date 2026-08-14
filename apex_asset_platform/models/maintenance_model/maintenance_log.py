@@ -102,8 +102,8 @@ class MaintenanceLog:
             "asset_id": self.asset_id,
             "service_date": self.service_date,
             "description": self.description,
-            "cost": self.cost,
-            "meter_hours_at_service": self.meter_hours_at_service,
+            "cost": f"{self.cost:.2f}",
+            "meter_hours_at_service": str(self.meter_hours_at_service),
             "performed_by": self.performed_by,
         }
 
@@ -117,18 +117,23 @@ class MaintenanceLog:
         Returns:
             MaintenanceLog: Hydrated MaintenanceLog domain instance.
         """
+        cost_val = float(data.get("cost", 0.0)) if data.get("cost") else 0.0
+        hours_val = (
+            float(data.get("meter_hours_at_service", 0.0))
+            if data.get("meter_hours_at_service")
+            else 0.0
+        )
         return cls(
-            maintenance_id=data["maintenance_id"],
-            asset_id=data["asset_id"],
-            service_date=data["service_date"],
-            description=data["description"],
-            cost=data["cost"],
-            meter_hours_at_service=data["meter_hours_at_service"],
-            performed_by=data["performed_by"],
+            maintenance_id=str(data.get("maintenance_id", "")),
+            asset_id=str(data.get("asset_id", "")),
+            service_date=str(data.get("service_date", "")),
+            description=str(data.get("description", "")),
+            cost=cost_val,
+            meter_hours_at_service=hours_val,
+            performed_by=str(data.get("performed_by", "")),
         )
 
-
-     # =========================================================================
+    # =========================================================================
     # Setters and Getters
     # =========================================================================
 
@@ -137,39 +142,44 @@ class MaintenanceLog:
         return self._cost
 
     @cost.setter
-    def cost(self, value: float):
-        if not isinstance(value, (int, float)) or value < 0:
+    def cost(self, value: float | int | str):
+        try:
+            parsed_cost = float(value)
+        except (ValueError, TypeError):
+            raise ValueError("Cost must be a valid non-negative number.")
+
+        if parsed_cost < 0:
             raise ValueError("Cost must be a non-negative number.")
-        self._cost = float(value)
-    
+        self._cost = parsed_cost
+
     @property
     def description(self) -> str:
         return self._description
-    
+
     @description.setter
-    def description(self, value: str):
-        if not isinstance(value, str) or not value.strip():
-            raise ValueError("Description must be a non-empty string.")
-        self._description = value.strip()
-    
-    @property 
+    def description(self, value: str | None):
+        if value is not None and not isinstance(value, str):
+            raise ValueError("Description must be a string.")
+        self._description = value.strip() if value else ""
+
+    @property
     def service_date(self) -> str:
         return self._service_date
-    
+
     @service_date.setter
-    def service_date(self, value: str):
-        if not isinstance(value, str) or not value.strip():
-            raise ValueError("Service date must be a non-empty string.")
-        self._service_date = value.strip()
-    
-    @property 
-    def perform_by(self) -> str: 
+    def service_date(self, value: str | None):
+        if value is not None and not isinstance(value, str):
+            raise ValueError("Service date must be a string.")
+        self._service_date = value.strip() if value else ""
+
+    @property
+    def performed_by(self) -> str:
         return self._performed_by
-    
-    @perform_by.setter
-    def perform_by(self, value: str):
-        if not isinstance(value, str):
-            raise ValueError("Performed by must be a non-empty string.")
-        self._performed_by = value.strip()
+
+    @performed_by.setter
+    def performed_by(self, value: str | None):
+        if value is not None and not isinstance(value, str):
+            raise ValueError("Performed by must be a string.")
+        self._performed_by = value.strip() if value else ""
         
     
