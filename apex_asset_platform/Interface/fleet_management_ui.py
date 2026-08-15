@@ -1,8 +1,8 @@
+# pyrefly: ignore [missing-import]
 from models.fleet_management_models.base_equipment import BaseEquipment
-from models.fleet_management_models.enum import EquipmentStatus
+from models.fleet_management_models.fleet_enum import EquipmentStatus
 from models.fleet_management_models.powered_equipment import PoweredEquipment
 from services.fleet_service import FleetService
-
 def display_fleet_menu() -> None:
     """Displays the Fleet Management sub-menu options."""
     print("==================================================")

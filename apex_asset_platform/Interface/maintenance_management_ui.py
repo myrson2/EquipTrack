@@ -72,14 +72,12 @@ def handle_maintenance_operations(
                         equipment = fleet_svc.get_equipment_by_id(asset_id)
                         meter_reading = getattr(equipment, "current_hours", 0.0)
 
-                        # 2. Generate unique MaintenanceLog ID
-                        log_id = f"MNT-{random.randint(9000, 9999)}"
-                        today_str = datetime.now().strftime("%Y-%m-%d")
+                        # # 2. Generate unique MaintenanceLog ID
+                        # log_id = f"MNT-{random.randint(9000, 9999)}"
+                        # today_str = datetime.now().strftime("%Y-%m-%d")
 
                         log_obj = MaintenanceLog(
-                            maintenance_id=log_id,
                             asset_id=asset_id,
-                            service_date=today_str,
                             description=description,
                             cost=cost_val,
                             meter_hours_at_service=meter_reading,
@@ -92,11 +90,11 @@ def handle_maintenance_operations(
                         print("\n==================================================")
                         print("        MAINTENANCE COMPLETED SUCCESSFULLY        ")
                         print("==================================================")
-                        print(f"Log ID:          {log_id}")
-                        print(f"Asset ID:        {asset_id}")
+                        print(f"Log ID:          {log_obj.maintenance_id}")
+                        print(f"Asset ID:        {log_obj.asset_id}")
                         print(f"Status:          AVAILABLE (Restored to Inventory)")
-                        print(f"Technician:      {tech_name}")
-                        print(f"Service Cost:    ${cost_val:.2f}")
+                        print(f"Technician:      {log_obj.performed_by}")
+                        print(f"Service Cost:    ${log_obj.cost:.2f}")
                         print("==================================================\n")
                 except ValueError as err:
                     print(f"\nERROR: {err}\n")

@@ -1,6 +1,7 @@
-from services.maintenance_service import MaintenanceService
 from pathlib import Path
 import csv
+
+from services.maintenance_service import MaintenanceService
 import exceptions.custom_exceptions as custom_exceptions
 import repositories.json_repository as json_repository
 from interface.customer_management_ui import handle_customer_management
@@ -44,10 +45,9 @@ def load_repository(file_path: Path) -> None:
 def main() -> None:
     """Application entry point and main terminal loop."""
     try:
-        data_sample_path = Path("data_sample")
-        if data_sample_path.is_dir():
+        data_sample_path = Path(__file__).parent / "data_sample"
+        if data_sample_path.exists():
             load_repository(data_sample_path)
-            is_save = True
     except Exception as e:
         print(f"Storage Initialization Notice: {e}")
 
@@ -60,12 +60,11 @@ def main() -> None:
     fleet_svc = FleetService(fleet_repository=fleet_repo, maintenance_service=mtn_svc)
     customer_svc = CustomerService(customer_repository=customer_repo)
     rental_svc = RentalService(contract_repository=contract_repo, fleet_service=fleet_svc, customer_service=customer_svc)
-    
-    if is_save:
-        fleet_svc.save_fleet_cache()
-        customer_svc.save_customer_cache()
-        rental_svc.save_contract_cache()
-        mtn_svc.save_maintenance_cache()
+
+    fleet_svc.save_fleet_cache()
+    customer_svc.save_customer_cache()
+    rental_svc.save_contract_cache()
+    mtn_svc.save_maintenance_cache()
 
     while True:
         display_menu()
@@ -88,6 +87,11 @@ def main() -> None:
                 print("\nOpening Reports & Analytics...\n")
             case "6":
                 print("\nExiting system. Goodbye!")
+                # safely save all data to JSON files
+                fleet_svc.save_fleet_cache()
+                customer_svc.save_customer_cache()
+                rental_svc.save_contract_cache()
+                mtn_svc.save_maintenance_cache()
                 break
             case _:
                 print("\nInvalid choice. Please select a valid option [1-6].\n")

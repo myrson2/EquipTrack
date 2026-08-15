@@ -13,8 +13,8 @@ class MaintenanceLog:
 
     def __init__(
         self,
-        maintenance_id: str,
         asset_id: str,
+        maintenance_id: str | None = None,
         service_date: str | None = None,
         description: str | None = None,
         cost: float = 0.0,
@@ -102,8 +102,8 @@ class MaintenanceLog:
             "asset_id": self.asset_id,
             "service_date": self.service_date,
             "description": self.description,
-            "cost": f"{self.cost:.2f}",
-            "meter_hours_at_service": str(self.meter_hours_at_service),
+            "cost": self.cost,
+            "meter_hours_at_service": self.meter_hours_at_service,
             "performed_by": self.performed_by,
         }
 
@@ -142,7 +142,7 @@ class MaintenanceLog:
         return self._cost
 
     @cost.setter
-    def cost(self, value: float | int | str):
+    def cost(self, value: float):
         try:
             parsed_cost = float(value)
         except (ValueError, TypeError):
@@ -163,13 +163,13 @@ class MaintenanceLog:
         self._description = value.strip() if value else ""
 
     @property
-    def service_date(self) -> str:
+    def service_date(self) -> float:
         return self._service_date
 
     @service_date.setter
-    def service_date(self, value: str | None):
+    def service_date(self, value: str):
         if value is not None and not isinstance(value, str):
-            raise ValueError("Service date must be a string.")
+            raise ValueError("Service date must be a float.")
         self._service_date = value.strip() if value else ""
 
     @property
@@ -181,5 +181,13 @@ class MaintenanceLog:
         if value is not None and not isinstance(value, str):
             raise ValueError("Performed by must be a string.")
         self._performed_by = value.strip() if value else ""
-        
     
+    @property
+    def maintenance_id(self) -> str:
+        return self._maintenance_id
+
+    @maintenance_id.setter
+    def maintenance_id(self, value: str):
+        if value is not None and not isinstance(value, str):
+            raise ValueError("Maintenance ID must be a string.")
+        self._maintenance_id = value.strip() if value else ""

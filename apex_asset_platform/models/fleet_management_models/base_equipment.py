@@ -1,6 +1,5 @@
-
 from enum import Enum
-from models.fleet_management_models.enum import EquipmentType, EquipmentStatus
+from models.fleet_management_models.fleet_enum import EquipmentType, EquipmentStatus
 
 class BaseEquipment:
     """Base domain model representing a generic piece of fleet equipment.
@@ -19,6 +18,7 @@ class BaseEquipment:
         model_name: str,
         daily_rate: float,
         purchase_year: int,
+        equipment_type: EquipmentType | str = EquipmentType.STATIC,
         status: EquipmentStatus | str = EquipmentStatus.AVAILABLE,
         asset_id: str | None = None,
     ) -> None:
@@ -33,7 +33,7 @@ class BaseEquipment:
         """
 
         self.asset_id = asset_id
-        self.equipment_type = EquipmentType.STATIC
+        self.equipment_type = equipment_type
         self.model_name = model_name
         self.daily_rate = daily_rate
         self.purchase_year = purchase_year
@@ -85,28 +85,28 @@ class BaseEquipment:
         id_other = other.asset_id or ""
         return id_self < id_other
 
-    # @property
-    # def asset_id(self) -> str:
-    #     """Gets the asset_id.
-    #
-    #     Returns:
-    #         str: Unique asset ID string.
-    #     """
-    #     return self._asset_id
-    #
-    # @asset_id.setter
-    # def asset_id(self, value: str) -> None:
-    #     """Sets and validates the asset_id.
-    #
-    #     Args:
-    #         value (str): Non-empty string asset ID.
-    #
-    #     Raises:
-    #         ValueError: If value is empty or not a string.
-    #     """
-    #     if not value or not isinstance(value, str):
-    #         raise ValueError("asset_id must be a non-empty string.")
-    #     self._asset_id = value
+    @property
+    def asset_id(self) -> str:
+        """Gets the asset_id.
+    
+        Returns:
+            str: Unique asset ID string.
+        """
+        return self._asset_id
+    
+    @asset_id.setter
+    def asset_id(self, value: str | None) -> None:
+        """Sets and validates the asset_id.
+
+        Args:
+            value (str | None): Non-empty string asset ID or None during initial drafting.
+
+        Raises:
+            ValueError: If value is empty string or not a string.
+        """
+        if value is not None and (not isinstance(value, str) or not value.strip()):
+            raise ValueError("asset_id must be a non-empty string.")
+        self._asset_id = value.strip() if value else None
 
     @property
     def equipment_type(self) -> EquipmentType:

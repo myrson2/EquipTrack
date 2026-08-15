@@ -1,6 +1,4 @@
 from models.fleet_management_models.base_equipment import BaseEquipment, EquipmentType, EquipmentStatus
-
-
 class PoweredEquipment(BaseEquipment):
     """Specialized domain model representing engine-driven or powered machinery.
 

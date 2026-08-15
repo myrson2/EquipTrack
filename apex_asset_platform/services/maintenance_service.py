@@ -1,6 +1,11 @@
+from datetime import datetime
+from random import random
 from models.maintenance_model.maintenance_log import MaintenanceLog
 from repositories.json_repository import JSONRepository
 
+def maintenance_id_generator() -> str:
+    number = random.randint(1000, 10000)
+    return str(f"MNT-{number}")
 class MaintenanceService:
     """Business logic orchestration service for managing maintenance log history and JSON storage persistence.
 
@@ -36,6 +41,7 @@ class MaintenanceService:
         Args:
             maintenance_log (MaintenanceLog): MaintenanceLog domain object to append and save.
         """
+        maintenance_log.maintenance_id = maintenance_id_generator()
+        maintenance_log.service_date = datetime.now().strftime("%Y-%m-%d")
         self.maintenance_list.append(maintenance_log)
-        self.save_maintenance_cache()
 
