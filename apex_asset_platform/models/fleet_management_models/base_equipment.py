@@ -31,13 +31,12 @@ class BaseEquipment:
             purchase_year (int): Four-digit purchase year.
             status (EquipmentStatus): Operational status enum or string.
         """
-
-        self.asset_id = asset_id
         self.equipment_type = equipment_type
         self.model_name = model_name
         self.daily_rate = daily_rate
         self.purchase_year = purchase_year
         self.status = status
+        self.asset_id = asset_id
 
     def __repr__(self) -> str:
         """Returns string representation for developers.

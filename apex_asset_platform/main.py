@@ -1,10 +1,12 @@
 from pathlib import Path
 import csv
 
+from services import ReportService
 from services.maintenance_service import MaintenanceService
 import exceptions.custom_exceptions as custom_exceptions
 import repositories.json_repository as json_repository
 from interface.customer_management_ui import handle_customer_management
+from interface.report_ui import handle_report_operations
 from interface.fleet_management_ui import handle_fleet_management
 from interface.rental_management_ui import handle_rental_service
 from interface.maintenance_management_ui import handle_maintenance_operations
@@ -60,6 +62,7 @@ def main() -> None:
     fleet_svc = FleetService(fleet_repository=fleet_repo, maintenance_service=mtn_svc)
     customer_svc = CustomerService(customer_repository=customer_repo)
     rental_svc = RentalService(contract_repository=contract_repo, fleet_service=fleet_svc, customer_service=customer_svc)
+    report_svc = ReportService(fleet_service=fleet_svc, rental_service=rental_svc, maintenance_service=mtn_svc)
 
     fleet_svc.save_fleet_cache()
     customer_svc.save_customer_cache()
@@ -84,7 +87,7 @@ def main() -> None:
             case "4":
                 handle_maintenance_operations(fleet_svc, mtn_svc)
             case "5":
-                print("\nOpening Reports & Analytics...\n")
+                handle_report_operations(report_svc)
             case "6":
                 print("\nExiting system. Goodbye!")
                 # safely save all data to JSON files

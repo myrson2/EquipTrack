@@ -64,10 +64,13 @@ The **Maintenance & Service Operations Module** is the core operational health e
 
 ---
 
-### Task 4: Reports & Analytics Engine (`ReportService`) — `pending`
-- **Target File:** `apex_asset_platform/services/report_service.py`
-- **Status:** `pending` (Active Task)
-- **Planned Features:**
-  - [ ] Fleet Utilization Report (% of equipment currently RENTED vs AVAILABLE vs IN_MAINTENANCE).
-  - [ ] Revenue & Yield Summary (Total earnings from contracts).
-  - [ ] Total Maintenance Cost Analysis (Sum of service costs from `storage/maintenance.json`).
+### Task 4: Reports & Analytics Engine (`ReportService` & `report_ui.py`) — `pending`
+- **Target Files:** `apex_asset_platform/services/report_service.py` & `apex_asset_platform/interface/report_ui.py`
+- **Status:** `pending` (Active Progress)
+- **Implemented & Planned Features:**
+  - [x] Created `display_reports_menu()` and `handle_report_operations()` CLI boilerplate in `interface/report_ui.py`.
+  - [ ] Implement `get_fleet_utilization()` in `ReportService` (% of equipment currently RENTED vs AVAILABLE vs IN_MAINTENANCE).
+  - [ ] Implement `get_revenue_summary()` in `ReportService` (Total earnings from contracts).
+  - [ ] Implement `get_maintenance_cost_analysis()` in `ReportService` (Sum of service costs from `storage/maintenance.json`).
+  - [ ] Implement `get_executive_overview()` in `ReportService` (Combined operational summary).
+  - [ ] Hook Option `5. Reports & Analytics` in `main.py`.

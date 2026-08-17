@@ -23,7 +23,7 @@ Overall Platform Completion: [████████████████�
 | **2. Rental Operations & Checkout Desk** | `completed` | **100%** | Dispatch workflow (`CNTR-XXXX`), return checkout, 1.5x late penalties, fuel surcharges ($5/gal + $50 fee), receipt lookup |
 | **3. Service & Maintenance Operations** | `completed` | **100%** | `MaintenanceLog` model & magic methods, mechanic checkout, status restoration, historical logbook history |
 | **4. Fleet Inventory & Equipment Models** | `completed` | **100%** | `BaseEquipment` / `PoweredEquipment` OOP inheritance, status transitions, run-hour & fuel tracking |
-| **5. Reports & Analytics Engine** | `pending` | **0%** | Fleet utilization, revenue yields, and maintenance cost summaries planned |
+| **5. Reports & Analytics Engine** | `in-progress` | **25%** | CLI dashboard (`report_ui.py`) created; utilization, revenue yields, & repair cost algorithms in progress |
 
 ---
 
@@ -38,10 +38,12 @@ apex_asset_platform/
 │
 ├── main.py                     # Application entry point & CLI navigation loop
 │
-├── Interface/                  # Terminal User Interface modules
+├── interface/                  # Terminal User Interface modules
 │   ├── fleet_management_ui.py  # Fleet catalog & maintenance UI handlers
 │   ├── customer_management_ui.py# Customer account registration & filtering UI
-│   └── rental_management_ui.py # Rental Desk dispatch, return & contract lookup UI
+│   ├── rental_management_ui.py # Rental Desk dispatch, return & contract lookup UI
+│   ├── maintenance_management_ui.py# Service & maintenance operations UI
+│   └── report_ui.py            # Reports & Analytics CLI dashboard UI
 │
 ├── models/                     # Core domain entities (Encapsulated OOP)
 │   ├── contract_model/
