@@ -64,6 +64,7 @@ def main() -> None:
     rental_svc = RentalService(contract_repository=contract_repo, fleet_service=fleet_svc, customer_service=customer_svc)
     report_svc = ReportService(fleet_service=fleet_svc, rental_service=rental_svc, maintenance_service=mtn_svc)
 
+    # Saves the files in a correct data types
     fleet_svc.save_fleet_cache()
     customer_svc.save_customer_cache()
     rental_svc.save_contract_cache()
